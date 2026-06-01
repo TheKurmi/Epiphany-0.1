@@ -47,7 +47,7 @@ export default function SessionScreen({
     <div className="session">
       <header className="session-header">
         <button type="button" className="btn btn--back" onClick={onExit}>
-          ← Home
+          ← Practice
         </button>
         <div className="session-header__meta">
           <EpiphanyLogo variant="compact" showVersion={false} />
@@ -62,6 +62,9 @@ export default function SessionScreen({
           <div className="header-stats session-header__stats">
             <span className="stat-chip stat-chip--good">
               ✓ {challenge.stats.correct}
+            </span>
+            <span className="stat-chip stat-chip--near-miss">
+              ⚠ {challenge.stats.nearMiss}
             </span>
             <span className="stat-chip stat-chip--bad">
               ✗ {challenge.stats.incorrect}
@@ -101,7 +104,7 @@ export default function SessionScreen({
           <p className="empty-state">
             Nothing to practice with these settings.{' '}
             <button type="button" className="link-btn" onClick={onExit}>
-              Change settings on home
+              Change practice settings
             </button>
           </p>
         ) : null}
@@ -110,7 +113,7 @@ export default function SessionScreen({
           <p className="empty-state">
             Nothing to practice with these settings.{' '}
             <button type="button" className="link-btn" onClick={onExit}>
-              Change settings on home
+              Change practice settings
             </button>
           </p>
         ) : null}

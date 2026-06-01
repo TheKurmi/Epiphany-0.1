@@ -21,30 +21,37 @@ export default function SessionComplete({
           <span className="session-score-ring__label">Score</span>
         </div>
 
-        <div className="session-complete__stats session-complete__stats--four">
+        <div className="session-complete__stats session-complete__stats--primary">
           <div className="session-stat">
             <span className="session-stat__value session-stat__value--good">
               {stats.correct}
             </span>
-            <span className="session-stat__label">Correct</span>
+            <span className="session-stat__label">✅ Correct</span>
+          </div>
+          <div className="session-stat">
+            <span className="session-stat__value session-stat__value--near-miss">
+              {stats.nearMiss}
+            </span>
+            <span className="session-stat__label">⚠️ Near misses</span>
           </div>
           <div className="session-stat">
             <span className="session-stat__value session-stat__value--bad">
               {stats.incorrect}
             </span>
-            <span className="session-stat__label">Wrong</span>
-          </div>
-          <div className="session-stat">
-            <span className="session-stat__value session-stat__value--skipped">
-              {stats.skipped}
-            </span>
-            <span className="session-stat__label">Skipped</span>
-          </div>
-          <div className="session-stat">
-            <span className="session-stat__value">{stats.streak}</span>
-            <span className="session-stat__label">Final streak</span>
+            <span className="session-stat__label">❌ Wrong</span>
           </div>
         </div>
+
+        {stats.skipped > 0 ? (
+          <div className="session-complete__stats session-complete__stats--secondary">
+            <div className="session-stat">
+              <span className="session-stat__value session-stat__value--skipped">
+                {stats.skipped}
+              </span>
+              <span className="session-stat__label">Skipped</span>
+            </div>
+          </div>
+        ) : null}
 
         <p className="session-complete__meta">
           Best streak this round: <strong>{stats.bestStreak}</strong>

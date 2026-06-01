@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 import { topicToFilter, DEFAULT_SESSION_CONFIG } from './data/homeConfig'
+import { getLessonById } from './data/learn'
 import { useDeck } from './hooks/useDeck'
 import { useChallengeSession } from './hooks/useChallengeSession'
 import { STREAK_CELEBRATION } from './data/constants'
 import { initSpeech } from './utils/speech'
 import { launchConfetti } from './utils/confetti'
 import HomePage from './components/HomePage'
+import PracticeScreen from './components/PracticeScreen'
 import SessionScreen from './components/SessionScreen'
+import LearnScreen from './components/learn/LearnScreen'
+import TopicScreen from './components/learn/TopicScreen'
+import LessonScreen from './components/learn/LessonScreen'
+import MasteryQuizSession from './components/learn/MasteryQuizSession'
 import PronunciationToggle from './components/PronunciationToggle'
 import SettingsModal from './components/SettingsModal'
 import './App.css'
@@ -58,6 +64,9 @@ function applyThemeClass(darkMode) {
 
 export default function App() {
   const [screen, setScreen] = useState('home')
+  const [selectedLessonId, setSelectedLessonId] = useState(null)
+  const [selectedTopicId, setSelectedTopicId] = useState(null)
+  const [selectedMasteryLevel, setSelectedMasteryLevel] = useState(null)
   const [draftConfig, setDraftConfig] = useState(DEFAULT_SESSION_CONFIG)
   const [activeConfig, setActiveConfig] = useState(null)
   const [sessionKey, setSessionKey] = useState(0)
@@ -69,6 +78,12 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(readDarkModePref)
 
   const inSession = screen === 'session' && activeConfig !== null
+  const inPractice = screen === 'practice' || inSession
+  const inLearn =
+    screen === 'learn' ||
+    screen === 'topic' ||
+    screen === 'lesson' ||
+    screen === 'mastery-quiz'
   const category = inSession ? topicToFilter(activeConfig.topic) : 'all'
   const difficulty = inSession ? activeConfig.difficulty : 'easy'
 
@@ -114,7 +129,7 @@ export default function App() {
   }
 
   function exitSession() {
-    setScreen('home')
+    setScreen('practice')
     setActiveConfig(null)
     setCelebration('')
   }
@@ -136,9 +151,72 @@ export default function App() {
     exitSession()
   }
 
+  function openPractice() {
+    setScreen('practice')
+  }
+
+  function backFromPractice() {
+    setScreen('home')
+  }
+
+  function openLearn() {
+    setScreen('learn')
+  }
+
+  function openTopic(topicId) {
+    setSelectedTopicId(topicId)
+    setScreen('topic')
+  }
+
+  function openLesson(lessonId) {
+    const lesson = getLessonById(lessonId)
+    setSelectedLessonId(lessonId)
+    if (lesson) setSelectedTopicId(lesson.topicId)
+    setScreen('lesson')
+  }
+
+  function startMasteryQuiz(topicId, level) {
+    setSelectedTopicId(topicId)
+    setSelectedMasteryLevel(level)
+    setScreen('mastery-quiz')
+  }
+
+  function backFromLearn() {
+    setSelectedLessonId(null)
+    setSelectedTopicId(null)
+    setSelectedMasteryLevel(null)
+    setScreen('home')
+  }
+
+  function backFromTopic() {
+    setSelectedLessonId(null)
+    setSelectedMasteryLevel(null)
+    setScreen('learn')
+  }
+
+  function backFromLesson() {
+    setSelectedLessonId(null)
+    setScreen('topic')
+  }
+
+  function backFromMasteryQuiz() {
+    setSelectedMasteryLevel(null)
+    setScreen('topic')
+  }
+
+  function completeMasteryQuiz() {
+    setSelectedMasteryLevel(null)
+    setScreen('topic')
+  }
+
+  function openMasteryFromLesson(topicId) {
+    setSelectedTopicId(topicId)
+    setScreen('topic')
+  }
+
   return (
     <div className="app-shell">
-      {inSession ? (
+      {inPractice || inLearn ? (
         <PronunciationToggle
           enabled={showPronunciation}
           onChange={handlePronunciationToggle}
@@ -163,12 +241,54 @@ export default function App() {
         />
 
         {screen === 'home' ? (
-          <HomePage
+          <HomePage onLearn={openLearn} onPractice={openPractice} />
+        ) : null}
+
+        {screen === 'practice' ? (
+          <PracticeScreen
             config={draftConfig}
             onChange={updateDraft}
             onStart={startSession}
+            onBack={backFromPractice}
           />
-        ) : (
+        ) : null}
+
+        {screen === 'learn' ? (
+          <LearnScreen
+            onBack={backFromLearn}
+            onOpenTopic={openTopic}
+            onOpenLesson={openLesson}
+          />
+        ) : null}
+
+        {screen === 'topic' ? (
+          <TopicScreen
+            topicId={selectedTopicId}
+            onBack={backFromTopic}
+            onOpenLesson={openLesson}
+            onStartMastery={(level) => startMasteryQuiz(selectedTopicId, level)}
+          />
+        ) : null}
+
+        {screen === 'lesson' ? (
+          <LessonScreen
+            lessonId={selectedLessonId}
+            onBack={backFromLesson}
+            onOpenMastery={openMasteryFromLesson}
+            showPronunciation={showPronunciation}
+          />
+        ) : null}
+
+        {screen === 'mastery-quiz' ? (
+          <MasteryQuizSession
+            topicId={selectedTopicId}
+            masteryLevel={selectedMasteryLevel}
+            onBack={backFromMasteryQuiz}
+            onComplete={completeMasteryQuiz}
+          />
+        ) : null}
+
+        {screen === 'session' ? (
           <SessionScreen
             config={activeConfig}
             study={study}
@@ -181,7 +301,7 @@ export default function App() {
             onChallengeAnswer={handleChallengeAnswer}
             onStudyReviewed={() => setStudyReviewed((n) => n + 1)}
           />
-        )}
+        ) : null}
       </div>
     </div>
   )

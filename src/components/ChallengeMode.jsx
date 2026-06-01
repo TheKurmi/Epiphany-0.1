@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getCardSides } from '../utils/cardSides'
-import { checkAnswer } from '../utils/answers'
+import { evaluateAnswer } from '../utils/answers'
 import { isGreek } from '../utils/pronunciation'
 import { speakGreek } from '../utils/speech'
 import GreekWord from './GreekWord'
@@ -72,9 +72,15 @@ export default function ChallengeMode({
       return
     }
 
-    const correct = checkAnswer(trimmed, sides.answer)
-    setPhase(correct ? 'correct' : 'incorrect')
-    onAnswer(correct ? 'correct' : 'incorrect')
+    const result = evaluateAnswer(trimmed, sides.answer)
+    const phaseResult =
+      result === 'wrong'
+        ? 'incorrect'
+        : result === 'nearMiss'
+          ? 'near-miss'
+          : result
+    setPhase(phaseResult)
+    onAnswer(result === 'wrong' ? 'incorrect' : result)
   }
 
   function revealAnswer() {
@@ -194,6 +200,22 @@ export default function ChallengeMode({
             <div>
               <strong>Correct!</strong>
               <div className="feedback-banner__answer">{renderAnswerLine()}</div>
+            </div>
+          </div>
+        ) : null}
+
+        {phase === 'near-miss' ? (
+          <div className="feedback-banner feedback-banner--near-miss" role="status">
+            <span className="feedback-banner__icon" aria-hidden="true">
+              ⚠
+            </span>
+            <div>
+              <strong>Almost!</strong>
+              <p className="feedback-banner__label">
+                Very close — check the spelling:
+              </p>
+              <div className="feedback-banner__answer">{renderAnswerLine()}</div>
+              <p className="feedback-banner__note">Counted as a near miss</p>
             </div>
           </div>
         ) : null}

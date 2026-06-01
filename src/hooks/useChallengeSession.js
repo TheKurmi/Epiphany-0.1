@@ -4,6 +4,7 @@ import { CHALLENGE_SESSION_SIZE } from '../data/constants'
 
 const emptyStats = () => ({
   correct: 0,
+  nearMiss: 0,
   incorrect: 0,
   skipped: 0,
   streak: 0,
@@ -71,6 +72,13 @@ export function useChallengeSession({
           correct: prev.correct + 1,
           streak,
           bestStreak: Math.max(prev.bestStreak, streak),
+        }
+      }
+      if (type === 'nearMiss') {
+        return {
+          ...prev,
+          nearMiss: prev.nearMiss + 1,
+          streak: 0,
         }
       }
       if (type === 'incorrect') {
