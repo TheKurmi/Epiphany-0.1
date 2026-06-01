@@ -1,10 +1,12 @@
+const SPEECH_RATE_KEY = 'epiphany-speech-rate'
 export function speakGreek(text) {
   if (!('speechSynthesis' in window)) return
 
   window.speechSynthesis.cancel()
   const utterance = new SpeechSynthesisUtterance(text)
   utterance.lang = 'el-GR'
-  utterance.rate = 0.85
+  const savedRate = localStorage.getItem(SPEECH_RATE_KEY)
+utterance.rate = savedRate ? Number(savedRate) : 0.85
 
   const voices = window.speechSynthesis.getVoices()
   const greekVoice = voices.find((v) => v.lang.startsWith('el'))

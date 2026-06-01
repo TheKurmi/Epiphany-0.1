@@ -8,10 +8,12 @@ import { launchConfetti } from './utils/confetti'
 import HomePage from './components/HomePage'
 import SessionScreen from './components/SessionScreen'
 import PronunciationToggle from './components/PronunciationToggle'
+import SettingsModal from './components/SettingsModal'
 import './App.css'
 
 const PRONUNCIATION_KEY = 'epiphany-show-pronunciation'
 const LEGACY_PRONUNCIATION_KEY = 'hellenic-show-pronunciation'
+const DARK_MODE_KEY = 'darkMode'
 
 function readPronunciationPref() {
   try {
@@ -28,6 +30,32 @@ function readPronunciationPref() {
   return false
 }
 
+function readDarkModePref() {
+  try {
+    const saved = localStorage.getItem(DARK_MODE_KEY)
+    if (saved === 'true') return true
+    if (saved === 'false') return false
+  } catch {
+    /* ignore */
+  }
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+function applyThemeClass(darkMode) {
+  const root = document.documentElement
+  const saved = localStorage.getItem(DARK_MODE_KEY)
+
+  root.classList.remove('dark', 'light')
+
+  if (saved === 'true') {
+    root.classList.add('dark')
+  } else if (saved === 'false') {
+    root.classList.add('light')
+  } else if (darkMode) {
+    root.classList.add('dark')
+  }
+}
+
 export default function App() {
   const [screen, setScreen] = useState('home')
   const [draftConfig, setDraftConfig] = useState(DEFAULT_SESSION_CONFIG)
@@ -37,6 +65,8 @@ export default function App() {
   const [studyReviewed, setStudyReviewed] = useState(0)
   const [celebration, setCelebration] = useState('')
   const [showPronunciation, setShowPronunciation] = useState(readPronunciationPref)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [darkMode, setDarkMode] = useState(readDarkModePref)
 
   const inSession = screen === 'session' && activeConfig !== null
   const category = inSession ? topicToFilter(activeConfig.topic) : 'all'
@@ -57,6 +87,10 @@ export default function App() {
   })
 
   useEffect(() => initSpeech(), [])
+
+  useEffect(() => {
+    applyThemeClass(darkMode)
+  }, [darkMode])
 
   function handlePronunciationToggle(value) {
     setShowPronunciation(value)
@@ -112,6 +146,22 @@ export default function App() {
       ) : null}
 
       <div className={`view-screen view-screen--${screen}`} key={screen}>
+        <button
+          type="button"
+          className="settings-trigger"
+          onClick={() => setIsSettingsOpen(true)}
+          aria-label="Open settings"
+        >
+          ⚙️
+        </button>
+
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+        />
+
         {screen === 'home' ? (
           <HomePage
             config={draftConfig}
