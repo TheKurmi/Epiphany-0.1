@@ -46,8 +46,24 @@ function greekLooseForms(text) {
     .toLowerCase()
   forms.add(unaccented)
 
+  for (const variant of greekDigraphVariants(unaccented)) {
+    forms.add(variant)
+  }
+
   return forms
 }
+
+/** Digraph / vowel pairs learners commonly confuse (half-cost substitutions). */
+const GREEK_DIGRAPH_SWAPS = [
+  ['ει', 'ι'],
+  ['ι', 'ει'],
+  ['αι', 'ε'],
+  ['ε', 'αι'],
+  ['οι', 'ι'],
+  ['ι', 'οι'],
+  ['ου', 'υ'],
+  ['υ', 'ου'],
+]
 
 /** Pairs of Greek letters/digraphs learners commonly confuse */
 const GREEK_CONFUSIONS = new Set([
@@ -61,7 +77,31 @@ const GREEK_CONFUSIONS = new Set([
   'ο|ω',
   'ε|αι',
   'αι|ε',
+  'σ|ς',
+  'ς|σ',
 ])
+
+/** Generate spelling variants with common learner digraph swaps. */
+function greekDigraphVariants(text) {
+  const variants = new Set([text])
+  let frontier = [text]
+
+  for (const [from, to] of GREEK_DIGRAPH_SWAPS) {
+    const next = []
+    for (const form of frontier) {
+      if (!form.includes(from)) continue
+      const swapped = form.replace(from, to)
+      if (!variants.has(swapped)) {
+        variants.add(swapped)
+        next.push(swapped)
+      }
+    }
+    frontier = next
+    if (!frontier.length) break
+  }
+
+  return variants
+}
 
 function greekSubstitutionCost(a, b) {
   if (a === b) return 0
@@ -170,6 +210,50 @@ export function evaluateAnswer(userInput, expected) {
   }
 
   return result
+}
+
+const CONFUSION_HINTS = [
+  { pair: ['ει', 'ι'], hint: 'You may have confused ει and ι.' },
+  { pair: ['ι', 'ει'], hint: 'You may have confused ι and ει.' },
+  { pair: ['η', 'ι'], hint: 'You may have confused η and ι.' },
+  { pair: ['ι', 'η'], hint: 'You may have confused ι and η.' },
+  { pair: ['η', 'υ'], hint: 'You may have confused η and υ.' },
+  { pair: ['υ', 'η'], hint: 'You may have confused υ and η.' },
+  { pair: ['υ', 'ι'], hint: 'You may have confused υ and ι.' },
+  { pair: ['ι', 'υ'], hint: 'You may have confused ι and υ.' },
+  { pair: ['ω', 'ο'], hint: 'You may have confused ω and ο.' },
+  { pair: ['ο', 'ω'], hint: 'You may have confused ο and ω.' },
+  { pair: ['αι', 'ε'], hint: 'You may have confused αι and ε.' },
+  { pair: ['ε', 'αι'], hint: 'You may have confused ε and αι.' },
+  { pair: ['οι', 'ι'], hint: 'You may have confused οι and ι.' },
+  { pair: ['ι', 'οι'], hint: 'You may have confused ι and οι.' },
+  { pair: ['ου', 'υ'], hint: 'You may have confused ου and υ.' },
+  { pair: ['υ', 'ου'], hint: 'You may have confused υ and ου.' },
+]
+
+/**
+ * Human-readable hint when answer is a near miss.
+ * @returns {string | null}
+ */
+export function getNearMissHint(userInput, expected) {
+  if (evaluateAnswer(userInput, expected) !== 'nearMiss') return null
+
+  const user = normalize(userInput)
+  const exp = normalize(expected)
+  if (!user || !exp) return 'Very close — check spelling and accents.'
+
+  for (const { pair, hint } of CONFUSION_HINTS) {
+    const [from, to] = pair
+    if (user.includes(from) && exp.includes(to) && user.replace(from, to) === exp) {
+      return hint
+    }
+  }
+
+  if (user.length === exp.length) {
+    return 'Very close — double-check accents and letter choices.'
+  }
+
+  return 'Almost there — check the full spelling.'
 }
 
 /**

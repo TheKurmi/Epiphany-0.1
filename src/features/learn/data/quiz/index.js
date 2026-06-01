@@ -3,7 +3,7 @@ import { getMasteryLevel, MASTERY_LEVELS } from './levels'
 import { generateConjugationQuestion, generateEndingRecognition } from './generators/conjugation'
 import { generateArticlesQuestion } from './generators/articles'
 import { generateNegationQuestion } from './generators/negation'
-import { generateSentenceQuestion } from './generators/sentence'
+import { generateVocabularyQuestion } from './generators/vocabulary'
 
 /**
  * @typedef {'multipleChoice' | 'fillBlank' | 'sentenceBlank'} QuestionType
@@ -41,6 +41,8 @@ export function generateQuestion(topicId, masteryLevel) {
       return generateNegationQuestion(profile, masteryLevel)
     case 'sentence':
       return generateSentenceQuestion(profile, masteryLevel)
+    case 'vocabulary':
+      return generateVocabularyQuestion(profile, masteryLevel)
     default:
       return null
   }
