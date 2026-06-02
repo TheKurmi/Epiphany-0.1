@@ -8,6 +8,8 @@ import TipsList from './TipsList'
 import AspectMatrix from './AspectMatrix'
 import ConceptDrill from './ConceptDrill'
 import TimeTimeline from './TimeTimeline'
+import VerbTransformationTable from './VerbTransformationTable'
+import LinguisticInsight from '@/shared/components/LinguisticInsight'
 
 export default function LessonSection({ section, showPronunciation, nested = false }) {
   const blockClass = nested ? 'lesson__block lesson__block--nested' : 'lesson__block'
@@ -153,7 +155,26 @@ export default function LessonSection({ section, showPronunciation, nested = fal
             title={section.title}
             caption={section.caption}
             items={section.items}
+            variant={section.variant}
           />
+        </section>
+      )
+
+    case 'verbTransformation':
+      return (
+        <section className={blockClass}>
+          <VerbTransformationTable
+            title={section.title}
+            caption={section.caption}
+            familyIds={section.familyIds}
+          />
+        </section>
+      )
+
+    case 'linguisticInsight':
+      return (
+        <section className={blockClass}>
+          <LinguisticInsight title={section.title} text={section.text} />
         </section>
       )
 

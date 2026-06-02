@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { recordPracticeAttempt } from '@/features/learn/hooks/useMasteryProgress'
+import { recordLearningAttempt } from '@/shared/memory/recordLearningAttempt'
 import { renderPrompt } from '@/shared/quiz/renderPrompt'
 import { useEnterContinue } from '@/shared/hooks/useEnterContinue'
 import PracticeFeedback, { evaluateTypedAnswer } from './PracticeFeedback'
@@ -43,9 +43,11 @@ export default function TypingPracticeMode({
     )
     setUserAnswer(trimmed)
     setPhase(nextPhase)
-    recordPracticeAttempt(topicId, {
+    recordLearningAttempt(topicId, {
       result,
       patternTag: question.patternTag,
+      userInput: trimmed,
+      expected: question.correctAnswer,
     })
     onAnswer(statType)
   }

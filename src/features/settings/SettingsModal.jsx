@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { STORAGE_KEYS } from '@/app/storage/keys'
 import {
   getSpeechRate,
@@ -55,7 +56,7 @@ export default function SettingsModal({
 
   if (!isOpen) return null
 
-  return (
+  return createPortal(
     <div
       className="settings-modal-overlay"
       onClick={onClose}
@@ -142,6 +143,7 @@ export default function SettingsModal({
 
         <DeveloperPanel onJumpLesson={onJumpLesson} onJumpStory={onJumpStory} />
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

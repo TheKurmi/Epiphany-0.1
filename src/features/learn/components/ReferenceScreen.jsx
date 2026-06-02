@@ -28,7 +28,7 @@ export default function ReferenceScreen({ onBack, showPronunciation }) {
 
       <p className="charts__intro">
         Core charts covering verbs, nouns, syntax, and everyday function words.
-        Expand any chart for tables, examples, and recognition tips.
+        Expand any chart — use the 🔍 control on a table for a calm, focused view.
       </p>
 
       <nav className="reference__nav" aria-label="Chart categories">

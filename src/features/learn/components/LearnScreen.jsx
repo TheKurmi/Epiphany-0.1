@@ -14,10 +14,18 @@ import {
 } from '@/features/learn/hooks/useMasteryProgress'
 import EpiphanyLogo from '@/shared/components/EpiphanyLogo'
 import SmartRecommendations from '@/shared/components/SmartRecommendations'
+import GuidedPathsPanel from './GuidedPathsPanel'
 import LessonCard from './LessonCard'
 import TopicCard from './TopicCard'
 
-export default function LearnScreen({ onBack, onOpenTopic, onOpenLesson, onOpenReference }) {
+export default function LearnScreen({
+  onBack,
+  onOpenTopic,
+  onOpenLesson,
+  onOpenReference,
+  onOpenRead,
+  onPractice,
+}) {
   const pathByLevel = getPathLessonsByLevel()
   const topicsByLevel = getTopicsByLevel()
   const { completedLessons } = useLearningProgress()
@@ -90,6 +98,13 @@ export default function LearnScreen({ onBack, onOpenTopic, onOpenLesson, onOpenR
         weakSpots={weakSpots}
         onOpenLesson={onOpenLesson}
         onOpenTopic={onOpenTopic}
+      />
+
+      <GuidedPathsPanel
+        completedLessons={completedLessons}
+        onOpenLesson={onOpenLesson}
+        onOpenRead={onOpenRead}
+        onPractice={onPractice}
       />
 
       <section className="learn__section" aria-labelledby="learning-path-heading">

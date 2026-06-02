@@ -40,6 +40,7 @@ export default function ScreenRouter({
         onLearn={nav.openLearn}
         onPractice={nav.openPractice}
         onRead={nav.openRead}
+        onOpenLesson={nav.openLesson}
       />
     )
   }
@@ -68,6 +69,8 @@ export default function ScreenRouter({
         onOpenTopic={nav.openTopic}
         onOpenLesson={nav.openLesson}
         onOpenReference={nav.openReference}
+        onOpenRead={nav.openReadPack}
+        onPractice={nav.openPractice}
       />
     )
   }

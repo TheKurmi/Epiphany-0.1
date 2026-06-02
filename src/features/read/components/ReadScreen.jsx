@@ -1,4 +1,5 @@
 import { getCategoriesWithPacks, getPackUnlockHint } from '@/features/read/data'
+import { inferReadingTier, getReadingTierMeta } from '@/features/read/data/readingTiers'
 import { useLearningProgress } from '@/shared/hooks/useLearningProgress'
 import EpiphanyLogo from '@/shared/components/EpiphanyLogo'
 
@@ -6,6 +7,7 @@ function PackCard({ pack, completedStories, onOpenPack }) {
   const doneCount = pack.stories.filter((s) =>
     completedStories.includes(s.id),
   ).length
+  const tierMeta = getReadingTierMeta(inferReadingTier(pack))
 
   function handleClick() {
     onOpenPack(pack.id)
@@ -24,7 +26,7 @@ function PackCard({ pack, completedStories, onOpenPack }) {
       <p className="read-pack-card__desc">{pack.description}</p>
       {pack.unlocked ? (
         <span className="read-pack-card__meta">
-          {pack.stories.length} stories
+          {tierMeta.label} · {pack.stories.length} stories
           {doneCount > 0 ? ` · ${doneCount} read` : ''}
         </span>
       ) : (

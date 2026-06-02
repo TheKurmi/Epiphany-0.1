@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { speakGreek } from '@/utils/speech'
-import { recordPracticeAttempt } from '@/features/learn/hooks/useMasteryProgress'
+import { recordLearningAttempt } from '@/shared/memory/recordLearningAttempt'
 import { useEnterContinue } from '@/shared/hooks/useEnterContinue'
 import PracticeFeedback, { evaluateTypedAnswer } from './PracticeFeedback'
 
@@ -54,9 +54,11 @@ export default function DictationPracticeMode({
     setUserAnswer(trimmed)
     setPhase(nextPhase)
     if (!item.patternTag?.startsWith('vocab-')) {
-      recordPracticeAttempt('sentence-structure', {
+      recordLearningAttempt('sentence-structure', {
         result,
         patternTag: item.patternTag,
+        userInput: trimmed,
+        expected: item.text,
       })
     }
     onAnswer(statType)

@@ -31,7 +31,7 @@ const HUB_CARDS = [
   },
 ]
 
-export default function HomePage({ onLearn, onPractice, onRead }) {
+export default function HomePage({ onLearn, onPractice, onRead, onOpenLesson }) {
   const handlers = { onLearn, onPractice, onRead }
 
   return (
@@ -44,7 +44,12 @@ export default function HomePage({ onLearn, onPractice, onRead }) {
         </p>
       </header>
 
-      <ProgressDashboard compact />
+      <ProgressDashboard
+        compact
+        onOpenLesson={onOpenLesson}
+        onPractice={onPractice}
+        onLearn={onLearn}
+      />
 
       <nav className="hub hub--three" aria-label="Choose your path">
         {HUB_CARDS.map((card) => (

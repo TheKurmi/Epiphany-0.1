@@ -6,6 +6,8 @@ import { useReadListen } from '@/shared/hooks/useReadListen'
 import VocabPopover from '@/shared/components/VocabPopover'
 import ReadingSentence from './ReadingSentence'
 import ComprehensionQuiz from './ComprehensionQuiz'
+import ShadowingBar from './ShadowingBar'
+import { inferReadingTier, getReadingTierMeta } from '@/features/read/data/readingTiers'
 
 export default function StoryReader({ storyId, onBack }) {
   const story = getStoryById(storyId)
@@ -17,6 +19,8 @@ export default function StoryReader({ storyId, onBack }) {
   const [showTranslation, setShowTranslation] = useState(false)
   const [showHighlights, setShowHighlights] = useState(true)
   const [showVocab, setShowVocab] = useState(true)
+  const [showGrammarHints, setShowGrammarHints] = useState(true)
+  const [shadowingMode, setShadowingMode] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
   const [progressiveReveal, setProgressiveReveal] = useState(false)
   const [revealedCount, setRevealedCount] = useState(
@@ -67,6 +71,9 @@ export default function StoryReader({ storyId, onBack }) {
       ? revealedCount
       : story.sentences.length
 
+  const readingTier = pack ? inferReadingTier(pack) : 1
+  const tierMeta = getReadingTierMeta(readingTier)
+
   return (
     <article
       className={`story-reader${focusMode ? ' story-reader--focus' : ''}${listenMode ? ' story-reader--listen' : ''}`}
@@ -77,6 +84,9 @@ export default function StoryReader({ storyId, onBack }) {
         </button>
         <span className={`story-reader__level story-reader__level--${story.level}`}>
           {story.level}
+        </span>
+        <span className="story-reader__tier-badge" title={tierMeta.description}>
+          {tierMeta.label}
         </span>
         {isListenPack ? (
           <span className="story-reader__mode-badge">Read & Listen</span>
@@ -118,6 +128,20 @@ export default function StoryReader({ storyId, onBack }) {
               onClick={() => setShowVocab((v) => !v)}
             >
               Vocab {showVocab ? 'on' : 'off'}
+            </button>
+            <button
+              type="button"
+              className={`story-reader__tool${showGrammarHints ? ' story-reader__tool--active' : ''}`}
+              onClick={() => setShowGrammarHints((v) => !v)}
+            >
+              Time hints {showGrammarHints ? 'on' : 'off'}
+            </button>
+            <button
+              type="button"
+              className={`story-reader__tool${shadowingMode ? ' story-reader__tool--active' : ''}`}
+              onClick={() => setShadowingMode((v) => !v)}
+            >
+              Shadow {shadowingMode ? 'on' : 'off'}
             </button>
             <button
               type="button"
@@ -180,12 +204,16 @@ export default function StoryReader({ storyId, onBack }) {
                     showTranslation={showTranslation}
                     showHighlights={showHighlights}
                     showVocab={showVocab}
+                    showGrammarHints={showGrammarHints}
                     onVocabClick={setActiveVocab}
                     activeVocab={activeVocab?.word}
                     isActive={isActive}
                     isRevealed={isRevealed}
                     dimmed={dimmed}
                   />
+                  {shadowingMode && isRevealed ? (
+                    <ShadowingBar text={sentence.text} />
+                  ) : null}
                   <button
                     type="button"
                     className="story-reader__sentence-audio"

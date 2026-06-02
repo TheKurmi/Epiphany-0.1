@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { evaluateAnswer } from '@/utils/answers'
-import { recordPracticeAttempt } from '@/features/learn/hooks/useMasteryProgress'
+import { recordLearningAttempt } from '@/shared/memory/recordLearningAttempt'
 import { useEnterContinue } from '@/shared/hooks/useEnterContinue'
 import PracticeFeedback, { resultToPhase } from './PracticeFeedback'
 
@@ -40,9 +40,11 @@ export default function SentenceBuilderMode({
     const nextPhase = resultToPhase(result)
     setUserSentence(attempt)
     setPhase(nextPhase)
-    recordPracticeAttempt('sentence-structure', {
+    recordLearningAttempt('sentence-structure', {
       result,
       patternTag: puzzle.patternTag,
+      userInput: attemptNorm,
+      expected,
     })
     onAnswer(result === 'wrong' ? 'incorrect' : result)
   }, [built, onAnswer, phase, puzzle])

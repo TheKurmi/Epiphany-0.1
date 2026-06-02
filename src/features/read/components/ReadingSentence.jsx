@@ -1,4 +1,5 @@
 import HighlightedGreekText from '@/shared/components/HighlightedGreekText'
+import { getSentenceTimeActionHint } from '@/shared/grammar/timeActionHints'
 
 /**
  * Render a Greek sentence with optional grammar highlights and clickable vocabulary.
@@ -8,6 +9,7 @@ export default function ReadingSentence({
   showTranslation = false,
   showHighlights = true,
   showVocab = true,
+  showGrammarHints = false,
   onVocabClick,
   activeVocab,
   isActive = false,
@@ -15,6 +17,7 @@ export default function ReadingSentence({
   dimmed = false,
 }) {
   const { text, english, highlights = [], vocabulary = [] } = sentence
+  const timeHint = showGrammarHints ? getSentenceTimeActionHint(text) : null
 
   if (!isRevealed) return null
 
@@ -33,6 +36,11 @@ export default function ReadingSentence({
           activeVocab={activeVocab}
         />
       </p>
+      {timeHint ? (
+        <p className="reading-sentence__time-hint" title={timeHint.detail}>
+          {timeHint.hint}
+        </p>
+      ) : null}
       {showTranslation ? (
         <p className="reading-sentence__english">{english}</p>
       ) : null}

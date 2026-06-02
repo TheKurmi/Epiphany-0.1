@@ -11,6 +11,7 @@ export const READ_PACKS = [
     description: 'Simple morning and evening habits — present tense in context.',
     starter: true,
     unlockLessons: [],
+    readingTier: 1,
   },
   {
     id: 'listen-routines',
@@ -28,6 +29,7 @@ export const READ_PACKS = [
     category: 'micro-stories',
     description: 'Classrooms, homework, and everyday student life.',
     unlockLessons: ['present-tense-endings', 'sentence-structure'],
+    readingTier: 2,
   },
   {
     id: 'food-cafe',
@@ -108,6 +110,7 @@ export const READ_PACKS = [
     category: 'guided-reading',
     description: 'See -ω and -άω verbs used naturally in short texts.',
     unlockLessons: ['verb-conjugation-groups', 'present-tense-endings'],
+    readingTier: 2,
   },
   {
     id: 'weather-everyday',

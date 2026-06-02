@@ -4,6 +4,8 @@ import { TOPIC_PRIMARY_LESSON, getRecommendedNextLesson } from './index'
 import { getLessonById } from '../index'
 import { getPackById } from '@/features/read/data/packs'
 import { STORIES } from '@/features/read/data/stories'
+import { getTopMistakeCategory } from '@/shared/memory/mistakePatterns'
+import { inferReadingTier, getReadingTierMeta, getSuggestedReadingTier } from '@/features/read/data/readingTiers'
 
 /** Maps weak pattern tags → review action. */
 const PATTERN_ACTIONS = {
@@ -147,16 +149,25 @@ export function getReviewRecommendations(weakSpots) {
  * @param {string[]} completedStoryIds
  */
 export function getRecommendedNextStory(completedLessonIds, completedStoryIds) {
-  for (const story of STORIES) {
-    if (completedStoryIds.includes(story.id)) continue
+  const suggestedTier = getSuggestedReadingTier(completedLessonIds)
+
+  const candidates = STORIES.filter((story) => {
+    if (completedStoryIds.includes(story.id)) return false
     const pack = getPackById(story.packId)
-    if (!pack || pack.comingSoon) continue
-    if (pack.starter) return story
-    if (pack.unlockLessons?.every((id) => completedLessonIds.includes(id))) {
-      return story
-    }
-  }
-  return null
+    if (!pack || pack.comingSoon) return false
+    if (pack.starter) return true
+    return pack.unlockLessons?.every((id) => completedLessonIds.includes(id))
+  })
+
+  candidates.sort((a, b) => {
+    const tierA = inferReadingTier(getPackById(a.packId))
+    const tierB = inferReadingTier(getPackById(b.packId))
+    const distA = Math.abs(tierA - suggestedTier)
+    const distB = Math.abs(tierB - suggestedTier)
+    return distA - distB
+  })
+
+  return candidates[0] ?? null
 }
 
 /**
@@ -192,9 +203,33 @@ export function getSmartGuidance(completedLessonIds, masteryAll, weakSpots) {
 
   const suggestedReview = [...reviews, ...lowMasteryTopics].slice(0, 4)
 
+  const topMistake = getTopMistakeCategory()
+  if (topMistake && topMistake.count >= 3) {
+    suggestedReview.unshift({
+      type: 'mistake-pattern',
+      topicId: 'present-tense',
+      lessonId: TOPIC_PRIMARY_LESSON['present-tense'],
+      label: topMistake.label,
+      message: `You often struggle with ${topMistake.label.toLowerCase()} — reinforce this pattern.`,
+      practiceMode: 'typing',
+    })
+  }
+
+  const nextStory = getRecommendedNextStory(completedLessonIds, [])
+  const readingRec = nextStory
+    ? {
+        type: 'reading',
+        storyId: nextStory.id,
+        packId: nextStory.packId,
+        message: `Continue reading: ${nextStory.title} (${getReadingTierMeta(inferReadingTier(getPackById(nextStory.packId))).label}).`,
+        label: nextStory.title,
+      }
+    : null
+
   return {
     nextLesson,
     suggestedReview,
+    readingRec,
   }
 }
 

@@ -33,6 +33,11 @@
   --modal-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   --card-shadow: 0 1px 3px rgba(28, 25, 23, 0.04);
 
+  /* Aliases used across chart / study components */
+  --surface: var(--card-bg);
+  --surface-elevated: var(--visual-bg);
+  --text: var(--text-primary);
+
   --font-brand: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-pronunciation: 'Segoe UI', system-ui, sans-serif;
 

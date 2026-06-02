@@ -2,6 +2,8 @@ import { useProgressDashboard } from '@/shared/hooks/useLearningProgress'
 import { LEARN_TOPICS } from '@/features/learn/data/topics'
 import { getReviewSummary } from '@/shared/hooks/useSpacedRepetition'
 import SmartRecommendations from '@/shared/components/SmartRecommendations'
+import ReviewTodayPanel from '@/shared/components/ReviewTodayPanel'
+import { getConfidenceMessages } from '@/shared/memory/reviewSurface'
 
 function formatPatternTag(tag) {
   const labels = {
@@ -18,7 +20,13 @@ function formatPatternTag(tag) {
   return labels[tag] ?? tag.replace(/-/g, ' ')
 }
 
-export default function ProgressDashboard({ compact = false, onOpenLesson, onOpenTopic }) {
+export default function ProgressDashboard({
+  compact = false,
+  onOpenLesson,
+  onOpenTopic,
+  onPractice,
+  onLearn,
+}) {
   const {
     streak,
     completedLessons,
@@ -35,6 +43,7 @@ export default function ProgressDashboard({ compact = false, onOpenLesson, onOpe
   } = useProgressDashboard()
 
   const reviewSummary = getReviewSummary()
+  const confidenceMessages = getConfidenceMessages(masteryAll, completedLessonIds)
 
   const hasActivity =
     completedLessons > 0 || avgMastery > 0 || completedStories > 0
@@ -88,6 +97,26 @@ export default function ProgressDashboard({ compact = false, onOpenLesson, onOpe
           Recommended next: <strong>{recommendedLesson.title}</strong>
         </p>
       ) : null}
+
+      {confidenceMessages.length ? (
+        <div className="progress-dashboard__confidence">
+          {confidenceMessages.map((msg) => (
+            <p key={msg} className="progress-dashboard__confidence-msg">
+              {msg}
+            </p>
+          ))}
+        </div>
+      ) : null}
+
+      <ReviewTodayPanel
+        weakSpots={weakSpots}
+        masteryAll={masteryAll}
+        completedLessons={completedLessonIds}
+        onOpenLesson={onOpenLesson}
+        onPractice={onPractice}
+        onLearn={onLearn}
+        limit={compact ? 3 : 4}
+      />
 
       {!compact && (onOpenLesson || onOpenTopic) ? (
         <SmartRecommendations

@@ -62,6 +62,7 @@ export const TOPIC_PRIMARY_LESSON = {
   modals: 'modal-verbs',
   'survival-greek': 'survival-greek',
   'past-tense': 'past-tense-intro',
+  'time-aspect': 'time-and-aspect',
   pronouns: 'object-pronouns',
   adjectives: 'adjective-agreement',
   'compound-sentences': 'compound-sentences',

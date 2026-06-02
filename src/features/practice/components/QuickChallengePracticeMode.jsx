@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { recordPracticeAttempt } from '@/features/learn/hooks/useMasteryProgress'
+import { recordLearningAttempt } from '@/shared/memory/recordLearningAttempt'
 import { renderPrompt } from '@/shared/quiz/renderPrompt'
 import { useEnterContinue } from '@/shared/hooks/useEnterContinue'
 import PracticeFeedback, { evaluateTypedAnswer } from './PracticeFeedback'
@@ -50,9 +50,10 @@ export default function QuickChallengePracticeMode({
             timedOutRef.current = true
             setPhase('incorrect')
             onAnswer('incorrect')
-            recordPracticeAttempt(topicId, {
+            recordLearningAttempt(topicId, {
               result: 'wrong',
               patternTag: question.patternTag,
+              expected: question.correctAnswer,
             })
           }
           return 0
@@ -79,9 +80,11 @@ export default function QuickChallengePracticeMode({
     )
     setUserAnswer(trimmed)
     setPhase(nextPhase)
-    recordPracticeAttempt(topicId, {
+    recordLearningAttempt(topicId, {
       result,
       patternTag: question.patternTag,
+      userInput: trimmed,
+      expected: question.correctAnswer,
     })
     onAnswer(statType)
   }
@@ -91,9 +94,11 @@ export default function QuickChallengePracticeMode({
     setSelected(index)
     const correct = option === question.correctAnswer
     setPhase(correct ? 'correct' : 'incorrect')
-    recordPracticeAttempt(topicId, {
+    recordLearningAttempt(topicId, {
       result: correct ? 'correct' : 'wrong',
       patternTag: question.patternTag,
+      userInput: option,
+      expected: question.correctAnswer,
     })
     onAnswer(correct ? 'correct' : 'incorrect')
   }
