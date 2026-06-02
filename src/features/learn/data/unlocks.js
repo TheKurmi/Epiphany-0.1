@@ -15,6 +15,7 @@ export const LESSON_PREREQUISITES = {
   'dates-calendar': ['numbers-counting'],
   'time-clock': ['dates-calendar', 'numbers-counting'],
   'modal-verbs': ['present-tense-endings', 'sentence-structure'],
+  'conversation-patterns': ['modal-verbs', 'survival-greek'],
   'verb-conjugation-groups': ['present-tense-endings', 'echo-essential'],
   'time-and-aspect': ['verb-conjugation-groups', 'present-tense-endings'],
   'past-tense-intro': ['time-and-aspect', 'verb-conjugation-groups', 'present-tense-endings'],

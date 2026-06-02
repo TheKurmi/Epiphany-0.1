@@ -1,12 +1,32 @@
 import { STORAGE_KEYS } from '@/app/storage/keys'
 import { LEARNING_PROFILES, getProfile } from './profiles'
+import {
+  isDevModeEnabled,
+  isDevUnlockActive,
+  setDevModeEnabled,
+} from '@/app/dev/devState'
 
 export { LEARNING_PROFILES, getProfile }
+
+/** Migrate legacy profile-based dev flag. */
+function migrateLegacyDeveloperProfile() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEYS.learningProfile)
+    if (saved === 'developer' && !isDevModeEnabled()) {
+      setDevModeEnabled(true)
+      localStorage.setItem(STORAGE_KEYS.learningProfile, 'beginner')
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
+migrateLegacyDeveloperProfile()
 
 export function readLearningProfile() {
   try {
     const saved = localStorage.getItem(STORAGE_KEYS.learningProfile)
-    if (saved && LEARNING_PROFILES[saved]) return saved
+    if (saved && LEARNING_PROFILES[saved] && saved !== 'developer') return saved
   } catch {
     /* ignore */
   }
@@ -14,7 +34,7 @@ export function readLearningProfile() {
 }
 
 export function writeLearningProfile(profileId) {
-  if (!LEARNING_PROFILES[profileId]) return
+  if (!LEARNING_PROFILES[profileId] || profileId === 'developer') return
   try {
     localStorage.setItem(STORAGE_KEYS.learningProfile, profileId)
     window.dispatchEvent(new Event('learning-profile'))
@@ -24,11 +44,11 @@ export function writeLearningProfile(profileId) {
 }
 
 export function isDeveloperMode() {
-  return readLearningProfile() === 'developer'
+  return isDevModeEnabled()
 }
 
 export function isUnlockBypassed() {
-  return getProfile(readLearningProfile()).unlockBypass
+  return isDevUnlockActive()
 }
 
 /** Dev-only: simulate a learner profile without unlocking everything. */

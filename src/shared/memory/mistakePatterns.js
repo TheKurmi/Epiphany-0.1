@@ -119,3 +119,23 @@ export function getMistakePatternSummary() {
 export function getTopMistakeCategory() {
   return getMistakePatternSummary().top[0] ?? null
 }
+
+export function clearMistakePatterns() {
+  writeStore({ counts: {}, recent: [] })
+}
+
+/** Seed mistake pattern counts for adaptive testing. */
+export function injectMistakeProfile(category, count, { patternTag, sample } = {}) {
+  const store = readStore()
+  store.counts[category] = (store.counts[category] ?? 0) + count
+
+  const entries = Array.from({ length: Math.min(count, 12) }, () => ({
+    category,
+    at: new Date().toISOString(),
+    patternTag: patternTag ?? null,
+    sample: sample ?? null,
+  }))
+  store.recent = [...entries, ...store.recent].slice(0, 40)
+
+  writeStore(store)
+}

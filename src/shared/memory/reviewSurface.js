@@ -13,6 +13,7 @@ export function buildReviewTodayItems({
   completedLessons = [],
   limit = 5,
 }) {
+  const done = Array.isArray(completedLessons) ? completedLessons : []
   const items = []
   const seen = new Set()
 
@@ -69,7 +70,7 @@ export function buildReviewTodayItems({
     })
   }
 
-  if (completedLessons.includes('time-and-aspect')) {
+  if (done.includes('time-and-aspect')) {
     const timeTopic = masteryAll['time-aspect']
     if (!timeTopic || timeTopic.masteryPercent < 70) {
       push({
@@ -105,15 +106,19 @@ export function buildReviewTodayItems({
 /** Understanding-focused encouragement — not XP spam. */
 export function getConfidenceMessages(masteryAll, completedLessons) {
   const messages = []
+  const done = Array.isArray(completedLessons) ? completedLessons : []
 
-  if (completedLessons.includes('present-tense-endings')) {
+  if (done.includes('present-tense-endings')) {
     messages.push('You are beginning to recognise present-tense endings naturally.')
   }
-  if (completedLessons.includes('plurals-patterns')) {
+  if (done.includes('plurals-patterns')) {
     messages.push('Plural patterns are becoming part of how you read Greek.')
   }
-  if (completedLessons.includes('time-and-aspect')) {
+  if (done.includes('time-and-aspect')) {
     messages.push('You now understand how Greek combines when + how actions unfold.')
+  }
+  if (done.includes('past-tense-intro')) {
+    messages.push('You are beginning to distinguish past ongoing from one-time actions.')
   }
 
   const articles = masteryAll.articles
@@ -124,6 +129,16 @@ export function getConfidenceMessages(masteryAll, completedLessons) {
   const timeAspect = masteryAll['time-aspect']
   if (timeAspect?.masteryPercent >= 60) {
     messages.push('Past ongoing vs one-time actions are starting to feel logical.')
+  }
+
+  const pastTense = masteryAll['past-tense']
+  if (pastTense?.masteryPercent >= 50) {
+    messages.push('You are recognising past tense patterns in reading naturally.')
+  }
+
+  const plurals = masteryAll.plurals
+  if (plurals?.masteryPercent >= 65) {
+    messages.push('Plural endings are becoming intuitive — not something you pause on.')
   }
 
   return messages.slice(-2)

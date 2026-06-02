@@ -53,9 +53,10 @@ export function useAppNavigation() {
         clearSelection(['lessonId', 'masteryLevel'])
         setScreen(SCREENS.LEARN)
       },
-      openLesson: (lessonId) => {
+      openLesson: (lessonId, { force = false } = {}) => {
         const lesson = getLessonById(lessonId)
-        if (!lesson || !isLessonUnlocked(lessonId, getCompletedLessons())) return
+        if (!lesson) return
+        if (!force && !isLessonUnlocked(lessonId, getCompletedLessons())) return
         go(SCREENS.LESSON, { lessonId, topicId: lesson.topicId })
       },
       backFromLesson: () => {

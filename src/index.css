@@ -161,6 +161,60 @@ body {
   min-height: 100svh;
 }
 
+.app-error-fallback {
+  max-width: 28rem;
+  margin: 4rem auto;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.app-error-fallback h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.app-error-fallback p {
+  margin: 0 0 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+.app-error-fallback__detail {
+  margin: 0 0 1rem;
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  text-align: left;
+  overflow-x: auto;
+  background: var(--visual-bg);
+  border-radius: 0.375rem;
+  color: var(--hard);
+}
+
+.app-error-fallback__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.app-error-fallback__btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--on-accent);
+  background: var(--accent);
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.app-error-fallback__btn--muted {
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
 .confetti-canvas {
   position: fixed;
   inset: 0;

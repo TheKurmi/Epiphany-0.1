@@ -25,7 +25,24 @@ function emptyProgress() {
 function readAll() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? { ...emptyProgress(), ...JSON.parse(raw) } : emptyProgress()
+    if (!raw) return emptyProgress()
+    const parsed = JSON.parse(raw)
+    const base = emptyProgress()
+    return {
+      ...base,
+      ...parsed,
+      completedLessons: Array.isArray(parsed.completedLessons)
+        ? parsed.completedLessons
+        : base.completedLessons,
+      completedStories: Array.isArray(parsed.completedStories)
+        ? parsed.completedStories
+        : base.completedStories,
+      streak: typeof parsed.streak === 'number' ? parsed.streak : base.streak,
+      totalReadingSessions:
+        typeof parsed.totalReadingSessions === 'number'
+          ? parsed.totalReadingSessions
+          : base.totalReadingSessions,
+    }
   } catch {
     return emptyProgress()
   }
@@ -78,6 +95,30 @@ function touchStreak(data) {
 
 export function getCompletedLessons() {
   return readAll().completedLessons ?? []
+}
+
+export function getLearningProgressSnapshot() {
+  return { ...readAll() }
+}
+
+export function setCompletedLessons(lessonIds) {
+  const data = readAll()
+  const updated = { ...data, completedLessons: [...new Set(lessonIds)] }
+  writeAll(updated)
+  snapshot = updated
+}
+
+export function setCompletedStories(storyIds) {
+  const data = readAll()
+  const updated = { ...data, completedStories: [...new Set(storyIds)] }
+  writeAll(updated)
+  snapshot = updated
+}
+
+export function resetLearningProgressData() {
+  localStorage.removeItem(STORAGE_KEY)
+  snapshot = emptyProgress()
+  window.dispatchEvent(new Event('learning-progress'))
 }
 
 export function markLessonComplete(lessonId) {

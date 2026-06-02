@@ -39,6 +39,10 @@
 /** @type {Story[]} */
 import { EXTENDED_STORIES } from './stories-extended'
 import { BATCH_2_STORIES } from './stories-batch-2'
+import { BATCH_3_STORIES } from './stories-batch-3'
+import { BATCH_4_STORIES } from './stories-batch-4'
+import { BATCH_5_STORIES } from './stories-batch-5'
+import { MICRO_DIALOGUES } from './micro-dialogues'
 
 const CORE_STORIES = [
   {
@@ -403,7 +407,15 @@ const CORE_STORIES = [
   },
 ]
 
-export const STORIES = [...CORE_STORIES, ...EXTENDED_STORIES, ...BATCH_2_STORIES]
+export const STORIES = [
+  ...CORE_STORIES,
+  ...EXTENDED_STORIES,
+  ...BATCH_2_STORIES,
+  ...BATCH_3_STORIES,
+  ...BATCH_4_STORIES,
+  ...BATCH_5_STORIES,
+  ...MICRO_DIALOGUES,
+]
 
 export function getStoryById(storyId) {
   return STORIES.find((s) => s.id === storyId) ?? null

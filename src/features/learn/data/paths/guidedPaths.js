@@ -13,7 +13,7 @@ export const GUIDED_PATHS = [
       'survival-greek',
     ],
     practiceModes: ['flashcards', 'typing'],
-    readPackIds: ['daily-routines', 'food-cafe', 'family-home'],
+    readPackIds: ['daily-routines', 'food-cafe', 'family-home', 'micro-dialogues', 'pets-home'],
     readingTier: 1,
   },
   {
@@ -23,7 +23,7 @@ export const GUIDED_PATHS = [
     description: 'Survival phrases, directions, ordering — ready for a trip.',
     lessonIds: ['survival-greek', 'question-words', 'prepositions-basic', 'numbers-counting'],
     practiceModes: ['dictation', 'quick-challenge'],
-    readPackIds: ['ordering-dialogues', 'directions-dialogues', 'transport-commute'],
+    readPackIds: ['ordering-dialogues', 'directions-dialogues', 'transport-commute', 'micro-dialogues'],
     readingTier: 1,
   },
   {
@@ -49,7 +49,7 @@ export const GUIDED_PATHS = [
     description: 'Gradual story progression — present tense toward richer dialogue.',
     lessonIds: ['sentence-structure', 'present-tense-endings', 'possessives'],
     practiceModes: ['flashcards', 'dictation'],
-    readPackIds: ['daily-routines', 'school-life', 'hobbies-friends', 'travel-town'],
+    readPackIds: ['daily-routines', 'school-life', 'hobbies-friends', 'travel-town', 'past-tales', 'emotions-states', 'casual-friends'],
     readingTier: 2,
   },
   {
@@ -59,8 +59,18 @@ export const GUIDED_PATHS = [
     description: 'Master how Greek thinks about when and how actions unfold.',
     lessonIds: ['present-tense-endings', 'verb-conjugation-groups', 'time-and-aspect', 'past-tense-intro'],
     practiceModes: ['typing', 'quick-challenge'],
-    readPackIds: ['verb-patterns', 'daily-routines'],
+    readPackIds: ['verb-patterns', 'past-tales', 'natural-greek'],
     readingTier: 3,
+  },
+  {
+    id: 'conversation',
+    emoji: '💬',
+    title: 'Conversation Path',
+    description: 'Patterns, glue words, and micro-dialogues — Greek that sounds alive.',
+    lessonIds: ['survival-greek', 'modal-verbs', 'conversation-patterns', 'questions-negation'],
+    practiceModes: ['dictation', 'flashcards'],
+    readPackIds: ['micro-dialogues', 'ordering-dialogues', 'casual-friends', 'opinions-chat'],
+    readingTier: 1,
   },
 ]
 

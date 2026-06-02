@@ -10,4 +10,7 @@ export const STORAGE_KEYS = {
   learningProfile: 'epiphany-learning-profile',
   spacedRepetition: 'epiphany-spaced-repetition',
   vocabProgress: 'epiphany-vocab-progress',
+  devModeEnabled: 'epiphany-dev-mode',
+  devTestAsLearner: 'epiphany-dev-test-as-learner',
+  devDebugOverlays: 'epiphany-dev-debug-overlays',
 }

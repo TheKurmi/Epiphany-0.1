@@ -174,6 +174,12 @@ export function getAggregatedWeakSpots(allProgress, limit = 5) {
   return spots.sort((a, b) => b.count - a.count).slice(0, limit)
 }
 
+/** Replace entire mastery store — developer testing only. */
+export function writeAllMasteryProgress(data) {
+  writeAll(data ?? {})
+  snapshot = readAll()
+}
+
 /**
  * Record a single practice attempt (typing, dictation, etc.) into mastery weak patterns.
  */

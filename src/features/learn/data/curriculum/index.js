@@ -25,6 +25,7 @@ export const BEGINNER_FOUNDATIONS = [
   'prepositions',
   'modals',
   'survival-greek',
+  'conversation',
 ]
 
 export const INTERMEDIATE_TRACK = [
@@ -61,6 +62,7 @@ export const TOPIC_PRIMARY_LESSON = {
   prepositions: 'prepositions-basic',
   modals: 'modal-verbs',
   'survival-greek': 'survival-greek',
+  conversation: 'conversation-patterns',
   'past-tense': 'past-tense-intro',
   'time-aspect': 'time-and-aspect',
   pronouns: 'object-pronouns',

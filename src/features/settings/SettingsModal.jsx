@@ -5,6 +5,7 @@ import {
   getSpeechRate,
   setSpeechRate as persistSpeechRate,
 } from '@/utils/speech'
+import { useDeveloperMode } from '@/app/dev/useDeveloperMode'
 import DeveloperPanel, { ProfileSelector } from './DeveloperPanel'
 
 export default function SettingsModal({
@@ -18,6 +19,7 @@ export default function SettingsModal({
   const [voices, setVoices] = useState([])
   const [selectedVoice, setSelectedVoice] = useState('')
   const [speechRate, setSpeechRate] = useState(0.85)
+  const { enabled: devMode } = useDeveloperMode()
 
   useEffect(() => {
     const loadVoices = () => {
@@ -142,6 +144,12 @@ export default function SettingsModal({
         </div>
 
         <DeveloperPanel onJumpLesson={onJumpLesson} onJumpStory={onJumpStory} />
+
+        {!devMode ? (
+          <p className="settings-modal__dev-hint">
+            <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd> — developer mode
+          </p>
+        ) : null}
       </div>
     </div>,
     document.body,

@@ -3,6 +3,7 @@
  * Consumed by flashcards, dictation, stories, quizzes, and adaptive systems.
  */
 import allItems from './all.json'
+import { VOCAB_BATCHES } from './batches/index.js'
 import { normalizeCategory, getCategoryLabel, VOCAB_CATEGORIES } from './categories'
 
 /** @typedef {import('@/schemas/content').VocabItemSchema} VocabItem */
@@ -25,10 +26,20 @@ function normalizeItem(raw) {
     pronunciation: raw.pronunciation ?? null,
     conjugationGroup: raw.conjugationGroup ?? null,
     relatedWords: raw.relatedWords ?? [],
+    exampleUsage: raw.exampleUsage ?? null,
   }
 }
 
-const ITEMS = allItems.map(normalizeItem)
+const coreItems = allItems.map(normalizeItem)
+const seenWords = new Set(coreItems.map((item) => item.word.toLowerCase()))
+const batchItems = VOCAB_BATCHES.map(normalizeItem).filter((item) => {
+  const key = item.word.toLowerCase()
+  if (seenWords.has(key)) return false
+  seenWords.add(key)
+  return true
+})
+
+const ITEMS = [...coreItems, ...batchItems]
 const byId = new Map(ITEMS.map((item) => [item.id, item]))
 const byWordLower = new Map(
   ITEMS.map((item) => [item.word.toLowerCase(), item]),

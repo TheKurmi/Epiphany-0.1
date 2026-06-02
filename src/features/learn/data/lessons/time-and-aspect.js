@@ -65,7 +65,7 @@ const lesson = {
       title: 'Action transformation patterns',
       caption:
         'Many “one time” forms build from “a lot of times” forms — the verb often becomes sharper in sound.',
-      familyIds: ['z-to-x', 'f-to-ps', 'past-layer'],
+      familyIds: ['z-to-x', 'f-to-ps', 's-to-s', 'past-layer'],
     },
     {
       type: 'verbTransformation',
@@ -119,6 +119,11 @@ const lesson = {
           note: 'Later · one time',
         },
       ],
+    },
+    {
+      type: 'linguisticInsight',
+      title: TIME_ACTION_INSIGHTS[4].title,
+      text: TIME_ACTION_INSIGHTS[4].text,
     },
     {
       type: 'tips',

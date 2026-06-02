@@ -17,6 +17,7 @@ export const LEARNING_PATH = [
   'dates-calendar',
   'time-clock',
   'modal-verbs',
+  'conversation-patterns',
   // Intermediate
   'verb-conjugation-groups',
   'time-and-aspect',

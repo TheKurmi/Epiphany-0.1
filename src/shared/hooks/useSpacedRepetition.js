@@ -87,3 +87,30 @@ export function getReviewSummary() {
   const weak = getRecentWeakItems(100).length
   return { due, weak, totalTracked: Object.keys(store.items).length }
 }
+
+export function clearReviewStore() {
+  writeStore(emptyStore())
+}
+
+/** Inject review items for developer testing. */
+export function injectReviewItems(items) {
+  const store = readStore()
+  const now = new Date()
+  now.setDate(now.getDate() - 1)
+
+  for (const item of items) {
+    const key = itemKey(item.type, item.id)
+    store.items[key] = {
+      type: item.type,
+      id: item.id,
+      strength: item.strength ?? 0,
+      reviews: item.reviews ?? 1,
+      wrong: item.wrong ?? 1,
+      nearMiss: item.nearMiss ?? 0,
+      lastReviewed: now.toISOString(),
+      nextReview: now.toISOString(),
+    }
+  }
+
+  writeStore(store)
+}

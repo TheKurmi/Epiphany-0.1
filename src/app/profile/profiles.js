@@ -27,15 +27,6 @@ export const LEARNING_PROFILES = {
     unlockBypass: false,
     defaultDifficulty: 'hard',
   },
-  developer: {
-    id: 'developer',
-    emoji: '🛠',
-    label: 'Developer Mode',
-    description: 'Unlock everything and expose testing tools.',
-    recommendedStartLesson: null,
-    unlockBypass: true,
-    defaultDifficulty: 'all',
-  },
 }
 
 export const PROFILE_IDS = Object.keys(LEARNING_PROFILES)

@@ -94,6 +94,13 @@ export const LEARN_TOPICS = [
     track: 'foundations',
     description: 'Greetings, shopping, food, directions, transport',
   },
+  {
+    id: 'conversation',
+    label: 'Conversation Patterns',
+    level: 'beginner',
+    track: 'foundations',
+    description: 'θέλω να…, μου αρέσει…, and natural spoken glue',
+  },
 
   // —— Intermediate ——
   {

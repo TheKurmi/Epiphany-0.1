@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { DEFAULT_PRACTICE_CONFIG } from '@/features/practice/data/config'
 import { STREAK_CELEBRATION } from '@/data/constants'
 import { initSpeech } from '@/utils/speech'
@@ -12,10 +12,13 @@ import {
 } from '@/app/preferences'
 import { useAppNavigation } from '@/app/navigation/useAppNavigation'
 import { usePracticeSessionStack } from '@/app/hooks/usePracticeSessionStack'
+import { toggleDevMode, DevModeIndicator, DevDiagnosticsPanel } from '@/app/dev'
+import { getLessonById } from '@/features/learn/data'
+import { getStoryById } from '@/features/read/data'
+import { SCREENS } from '@/app/navigation/screens'
 import AppShell from '@/app/AppShell'
 import ScreenRouter from '@/app/ScreenRouter'
 import { initDocumentTitle } from '@/app/documentTitle'
-import { getStoryById } from '@/features/read/data'
 import '@/styles/app.css'
 
 export default function App() {
@@ -39,6 +42,36 @@ export default function App() {
   useEffect(() => {
     applyThemeClass(darkMode)
   }, [darkMode])
+
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'd') {
+        e.preventDefault()
+        toggleDevMode()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  const devContext = useMemo(() => {
+    if (screen === SCREENS.LESSON && selection.lessonId) {
+      const lesson = getLessonById(selection.lessonId)
+      return lesson
+        ? { type: 'lesson', id: lesson.id, level: lesson.level, tags: [lesson.topicId] }
+        : null
+    }
+    if (screen === SCREENS.STORY && selection.storyId) {
+      const story = getStoryById(selection.storyId)
+      return story
+        ? { type: 'story', id: story.id, level: story.level, tags: story.requiredTopics }
+        : null
+    }
+    if (screen === SCREENS.READ_PACK && selection.packId) {
+      return { type: 'pack', id: selection.packId }
+    }
+    return { type: screen }
+  }, [screen, selection.lessonId, selection.storyId, selection.packId])
 
   function updateDraft(patch) {
     setDraftConfig((c) => ({ ...c, ...patch }))
@@ -84,7 +117,10 @@ export default function App() {
   }
 
   return (
-    <AppShell
+    <>
+      <DevModeIndicator />
+      <DevDiagnosticsPanel context={devContext} />
+      <AppShell
       screen={screen}
       showPronunciation={showPronunciation}
       onPronunciationChange={(value) => {
@@ -98,7 +134,7 @@ export default function App() {
       onCloseSettings={() => setIsSettingsOpen(false)}
       onJumpLesson={(lessonId) => {
         setIsSettingsOpen(false)
-        nav.openLesson(lessonId)
+        nav.openLesson(lessonId, { force: true })
       }}
       onJumpStory={(storyId) => {
         setIsSettingsOpen(false)
@@ -130,5 +166,6 @@ export default function App() {
         }}
       />
     </AppShell>
+    </>
   )
 }

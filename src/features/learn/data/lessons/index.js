@@ -20,6 +20,7 @@ import adjectiveAgreement from './adjective-agreement'
 import frequencyHabit from './frequency-habit'
 import compoundSentences from './compound-sentences'
 import timeAndAspect from './time-and-aspect'
+import conversationPatterns from './conversation-patterns'
 
 /** @type {Record<string, import('../index').Lesson>} */
 export const LESSONS = {
@@ -45,6 +46,7 @@ export const LESSONS = {
   [frequencyHabit.id]: frequencyHabit,
   [compoundSentences.id]: compoundSentences,
   [timeAndAspect.id]: timeAndAspect,
+  [conversationPatterns.id]: conversationPatterns,
 }
 
 export const ALL_LESSONS = Object.values(LESSONS).sort(
