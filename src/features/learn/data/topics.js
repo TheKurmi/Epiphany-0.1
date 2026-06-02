@@ -97,6 +97,13 @@ export const LEARN_TOPICS = [
 
   // —— Intermediate ——
   {
+    id: 'time-aspect',
+    label: 'Time & Aspect',
+    level: 'intermediate',
+    track: 'grammar',
+    description: 'How Greek combines when + how an action unfolds — the logic behind tenses',
+  },
+  {
     id: 'verb-groups',
     label: 'Verb Groups / Συζυγίες',
     level: 'intermediate',
@@ -145,7 +152,7 @@ export const LEARN_TOPICS = [
     label: 'Irregular Structures',
     level: 'advanced',
     track: 'roadmap',
-    description: 'Tricky verbs and exceptions worth knowing',
+    description: 'Stem changes, suppletive forms, and verbs that break the pattern',
     comingSoon: true,
   },
   {
@@ -153,7 +160,7 @@ export const LEARN_TOPICS = [
     label: 'Passive Voice',
     level: 'advanced',
     track: 'roadmap',
-    description: 'When the subject receives the action',
+    description: 'When the subject receives the action — -ομαι verbs and usage',
     comingSoon: true,
   },
   {
@@ -161,7 +168,7 @@ export const LEARN_TOPICS = [
     label: 'Cases & Declensions',
     level: 'advanced',
     track: 'roadmap',
-    description: 'Noun forms across the sentence',
+    description: 'Nominative, accusative, genitive — noun forms across the sentence',
     comingSoon: true,
   },
   {
@@ -169,15 +176,15 @@ export const LEARN_TOPICS = [
     label: 'Conditionals',
     level: 'advanced',
     track: 'roadmap',
-    description: 'If… then… structures in Modern Greek',
+    description: 'Αν + subjunctive, hypothetical situations, and polite requests',
     comingSoon: true,
   },
   {
-    id: 'idioms',
-    label: 'Idioms & Expressions',
+    id: 'advanced-syntax',
+    label: 'Advanced Syntax',
     level: 'advanced',
     track: 'roadmap',
-    description: 'Natural phrases Greeks use every day',
+    description: 'Word order nuance, emphasis, and complex clause structure',
     comingSoon: true,
   },
   {
@@ -185,7 +192,23 @@ export const LEARN_TOPICS = [
     label: 'Formal vs Informal',
     level: 'advanced',
     track: 'roadmap',
-    description: 'Register, politeness, and social context',
+    description: 'εσύ vs εσείς, politeness levels, and social context',
+    comingSoon: true,
+  },
+  {
+    id: 'idioms',
+    label: 'Idioms & Expressions',
+    level: 'advanced',
+    track: 'roadmap',
+    description: 'Natural phrases Greeks use every day — beyond textbook Greek',
+    comingSoon: true,
+  },
+  {
+    id: 'subjunctive',
+    label: 'Subjunctive & Mood',
+    level: 'advanced',
+    track: 'roadmap',
+    description: 'να + verb, wishes, purpose clauses, and indirect commands',
     comingSoon: true,
   },
 ]

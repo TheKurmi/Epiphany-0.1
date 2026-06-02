@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { recordPracticeAttempt } from '@/features/learn/hooks/useMasteryProgress'
 import { renderPrompt } from '@/shared/quiz/renderPrompt'
+import { useEnterContinue } from '@/shared/hooks/useEnterContinue'
 import PracticeFeedback, { evaluateTypedAnswer } from './PracticeFeedback'
 
 export default function TypingPracticeMode({
@@ -54,6 +55,14 @@ export default function TypingPracticeMode({
     onNext()
   }
 
+  useEnterContinue({ enabled: revealed, onContinue: goNext })
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (revealed) goNext()
+    else submit()
+  }
+
   return (
     <section className="mode-panel practice-mode" aria-label="Typing practice">
       <div className={`challenge-card challenge-card--${phase}`}>
@@ -68,13 +77,7 @@ export default function TypingPracticeMode({
         ) : null}
 
         {!revealed ? (
-          <form
-            className="challenge-form"
-            onSubmit={(e) => {
-              e.preventDefault()
-              submit()
-            }}
-          >
+          <form className="challenge-form" onSubmit={handleSubmit}>
             <input
               ref={inputRef}
               type="text"

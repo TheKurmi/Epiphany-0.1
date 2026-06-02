@@ -9,7 +9,7 @@ export const LEARN_LEVELS = [
   {
     id: 'advanced',
     label: 'Advanced',
-    description: 'Irregular forms, cases, and complex syntax',
+    description: 'Irregular forms, cases, conditionals, and nuanced syntax',
   },
 ]
 

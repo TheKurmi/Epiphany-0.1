@@ -1,5 +1,6 @@
 import HomePage from '@/features/home/HomePage'
 import LearnScreen from '@/features/learn/components/LearnScreen'
+import ReferenceScreen from '@/features/learn/components/ReferenceScreen'
 import TopicScreen from '@/features/learn/components/TopicScreen'
 import LessonScreen from '@/features/learn/components/LessonScreen'
 import MasteryQuizSession from '@/features/learn/components/MasteryQuizSession'
@@ -66,6 +67,16 @@ export default function ScreenRouter({
         onBack={nav.backFromLearn}
         onOpenTopic={nav.openTopic}
         onOpenLesson={nav.openLesson}
+        onOpenReference={nav.openReference}
+      />
+    )
+  }
+
+  if (screen === SCREENS.REFERENCE) {
+    return (
+      <ReferenceScreen
+        onBack={nav.backFromReference}
+        showPronunciation={showPronunciation}
       />
     )
   }

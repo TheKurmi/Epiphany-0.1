@@ -48,10 +48,11 @@ export function generateConjugationL2(profile) {
 
   return makeQuestion({
     type: 'fillBlank',
-    prompt: `${verb.lemma} → ${target.person}`,
+    prompt: `Type the **${target.person}** form (stem: **${verb.stem}-**${verb.context ? ` · ${verb.context}` : ''})`,
+    promptPlain: `Type the ${target.person} form (stem: ${verb.stem}-)`,
     correctAnswer: target.form,
     patternTag: target.ending,
-    hint: `Stem ${verb.stem} + ending ${target.ending}`,
+    hint: 'Apply the present-tense ending for this person',
   })
 }
 

@@ -21,6 +21,13 @@ const lesson = {
   },
   sections: [
     {
+      type: 'text',
+      title: 'Singular and plural together',
+      paragraphs: [
+        'Masculine and feminine plurals both use οι; neuter plural uses τα. The gender you learned in singular still applies — only the article and noun ending change shape.',
+      ],
+    },
+    {
       type: 'grammarTable',
       title: 'The three articles',
       caption: 'Spot the article — spot the gender.',
@@ -31,6 +38,27 @@ const lesson = {
         ['Neuter', 'το', 'το νερό'],
       ],
       highlightColumn: 1,
+    },
+    {
+      type: 'grammarTable',
+      title: 'Plural articles',
+      caption: 'Preview — full patterns in the Plurals lesson.',
+      columns: ['Gender', 'Singular', 'Plural', 'Example'],
+      rows: [
+        ['Masculine', 'ο', 'οι', 'ο καφές → οι καφέδες'],
+        ['Feminine', 'η', 'οι', 'η μέρα → οι μέρες'],
+        ['Neuter', 'το', 'τα', 'το νερό → τα νερά'],
+      ],
+      highlightColumn: 2,
+    },
+    {
+      type: 'examples',
+      title: 'Learn as chunks',
+      items: [
+        { greek: 'ο άνθρωπος', english: 'the person (m.)', note: 'masculine -ος' },
+        { greek: 'η καρέκλα', english: 'the chair (f.)', note: 'feminine -α' },
+        { greek: 'το τραπέζι', english: 'the table (n.)', note: 'neuter -ι' },
+      ],
     },
   ],
   commonMistakes: [

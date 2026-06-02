@@ -1,5 +1,7 @@
 import { useProgressDashboard } from '@/shared/hooks/useLearningProgress'
 import { LEARN_TOPICS } from '@/features/learn/data/topics'
+import { getReviewSummary } from '@/shared/hooks/useSpacedRepetition'
+import SmartRecommendations from '@/shared/components/SmartRecommendations'
 
 function formatPatternTag(tag) {
   const labels = {
@@ -16,7 +18,7 @@ function formatPatternTag(tag) {
   return labels[tag] ?? tag.replace(/-/g, ' ')
 }
 
-export default function ProgressDashboard({ compact = false }) {
+export default function ProgressDashboard({ compact = false, onOpenLesson, onOpenTopic }) {
   const {
     streak,
     completedLessons,
@@ -28,7 +30,11 @@ export default function ProgressDashboard({ compact = false }) {
     weakest,
     weakSpots,
     recommendedLesson,
+    masteryAll,
+    completedLessonIds,
   } = useProgressDashboard()
+
+  const reviewSummary = getReviewSummary()
 
   const hasActivity =
     completedLessons > 0 || avgMastery > 0 || completedStories > 0
@@ -65,6 +71,12 @@ export default function ProgressDashboard({ compact = false }) {
             <span className="progress-stat__label">stories read</span>
           </div>
         ) : null}
+        {reviewSummary.due > 0 ? (
+          <div className="progress-stat">
+            <span className="progress-stat__value">{reviewSummary.due}</span>
+            <span className="progress-stat__label">due for review</span>
+          </div>
+        ) : null}
       </div>
 
       <p className="progress-dashboard__path">
@@ -75,6 +87,17 @@ export default function ProgressDashboard({ compact = false }) {
         <p className="progress-dashboard__recommended">
           Recommended next: <strong>{recommendedLesson.title}</strong>
         </p>
+      ) : null}
+
+      {!compact && (onOpenLesson || onOpenTopic) ? (
+        <SmartRecommendations
+          completedLessons={completedLessonIds}
+          masteryAll={masteryAll}
+          weakSpots={weakSpots}
+          onOpenLesson={onOpenLesson}
+          onOpenTopic={onOpenTopic}
+          compact
+        />
       ) : null}
 
       {strongest.length || weakest.length ? (

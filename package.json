@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "vocabulary": "node scripts/generate-vocabulary.mjs",
+    "vocabulary": "node scripts/build-vocabulary.mjs",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

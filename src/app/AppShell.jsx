@@ -11,6 +11,8 @@ export default function AppShell({
   isSettingsOpen,
   onOpenSettings,
   onCloseSettings,
+  onJumpLesson,
+  onJumpStory,
   children,
 }) {
   const showPronunciationToggle =
@@ -40,6 +42,8 @@ export default function AppShell({
           onClose={onCloseSettings}
           darkMode={darkMode}
           setDarkMode={setDarkMode}
+          onJumpLesson={onJumpLesson}
+          onJumpStory={onJumpStory}
         />
 
         {children}

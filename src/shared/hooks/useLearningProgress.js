@@ -189,6 +189,7 @@ export function useProgressDashboard() {
   return {
     streak: progress.streak,
     completedLessons: progress.completedLessons.length,
+    completedLessonIds: progress.completedLessons,
     totalLessons: LEARNING_PATH.length,
     pathProgress,
     avgMastery,
@@ -197,5 +198,6 @@ export function useProgressDashboard() {
     weakest,
     weakSpots,
     recommendedLesson,
+    masteryAll,
   }
 }

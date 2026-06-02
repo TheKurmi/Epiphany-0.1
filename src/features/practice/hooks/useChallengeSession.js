@@ -35,16 +35,19 @@ export function useChallengeSession({
     return shuffled.slice(0, size)
   }, [pool])
 
+  const buildDeckRef = useRef(buildDeck)
+  buildDeckRef.current = buildDeck
+
   const startSession = useCallback(
     (reuseDeck = null) => {
-      const nextDeck = reuseDeck ?? buildDeck()
+      const nextDeck = reuseDeck ?? buildDeckRef.current()
       lastDeckRef.current = nextDeck
       setDeck(nextDeck)
       setIndex(0)
       setComplete(false)
       setStats(emptyStats())
     },
-    [buildDeck],
+    [],
   )
 
   useEffect(() => {

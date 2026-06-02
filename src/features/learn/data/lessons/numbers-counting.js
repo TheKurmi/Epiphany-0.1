@@ -9,13 +9,13 @@ const lesson = {
   summary: 'Count in Greek — prices, ages, and everyday quantities.',
   intro: {
     paragraphs: [
-      'Numbers appear everywhere in real Greek: café prices, bus routes, phone digits, and telling your age. Modern Greek uses the same numerals you see in English (1, 2, 3), but you need the words — ένα, δύο, τρία — to understand speech and speak yourself.',
-      'Learn 1–10 first. They are the building blocks for everything else: είκοσι (20) + πέντε (5) = είκοσι πέντε (25). Greeks often say numbers quickly in shops, so recognition matters as much as production.',
-      'In this lesson you will master 1–20, the tens (30, 40… 90), and εκατό (100). Dictation and listening practice will reinforce what you read here.',
+      'Numbers appear everywhere in real Greek: café prices, bus routes, phone digits, and telling your age. Modern Greek uses the same numerals you see in English (1, 2, 3), but you need the **words** — ένα, δύο, τρία — to understand speech and speak yourself.',
+      'Learn 1–10 first. They are the building blocks for everything else: είκοσι (20) + πέντε (5) = **είκοσι πέντε** (25). Greeks often say numbers quickly in shops, so **recognition** matters as much as production. Dictation practice trains your ear for this speed.',
+      'In this lesson you will master 1–20, the tens (30, 40… 90), and εκατό (100). Numbers 1–3 even change form with gender (ένας/μία/ένα) — but for counting and prices, neutral forms are enough to start.',
     ],
     examples: [
       { greek: 'ένα, δύο, τρία', english: 'one, two, three' },
-      { greek: 'είκοσι πέντε', english: 'twenty-five' },
+      { greek: 'είκοσι πέντε', english: 'twenty-five', note: 'Compound: tens + units, no “and”' },
       { greek: 'εκατό', english: 'one hundred' },
     ],
   },
@@ -53,9 +53,32 @@ const lesson = {
     },
   ],
   commonMistakes: [
-    { title: 'Gender with numbers', text: 'ένας/μία/ένα change with gender (ένας άντρας, μία μέρα, ένα παιδί) — start with neutral ένα for counting.' },
-    { title: 'Stress', text: 'Listen for stress: πέντε, τέσσερα, είκοσι — wrong stress sounds unnatural.' },
+    {
+      title: 'Gender with numbers',
+      text: 'ένας/μία/ένα change with gender (ένας άντρας, μία μέρα, ένα παιδί) — start with neutral ένα for counting.',
+    },
+    {
+      title: 'Stress',
+      text: 'Listen for stress: πέντε, τέσσερα, είκοσι — wrong stress sounds unnatural. Dictation mode helps train this.',
+    },
+    {
+      title: 'ει vs ι in tens',
+      text: 'είκοσι, τριάντα use ει — a common spelling confusion for learners. Near-miss feedback will flag these.',
+    },
   ],
+  deepDive: {
+    title: 'Dive deeper',
+    teaser: 'Larger numbers and phone-style counting',
+    sections: [
+      {
+        type: 'note',
+        title: 'Beyond 100',
+        paragraphs: [
+          '200 = διακόσια, 1000 = χίλια. For now, focus on 1–100 — it covers café prices, ages, and everyday quantities. Larger numbers follow the same compound logic: διακόσια είκοσι πέντε = 225.',
+        ],
+      },
+    ],
+  },
 }
 
 export default lesson

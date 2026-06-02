@@ -17,21 +17,23 @@ export const EXTENDED_STORIES = [
         text: '— Καλημέρα! Τι θα θέλατε;',
         english: '— Good morning! What would you like?',
         vocabulary: [
-          { word: 'θα θέλατε', english: 'would you like (formal)' },
+          { word: 'θα θέλατε', english: 'would you like (formal)', partOfSpeech: 'phrase' },
         ],
       },
       {
         text: '— Έναν καφέ, παρακαλώ.',
         english: '— A coffee, please.',
         highlights: [{ word: 'Έναν', type: 'article' }],
-        vocabulary: [{ word: 'παρακαλώ', english: 'please' }],
+        vocabulary: [
+          { word: 'παρακαλώ', english: 'please', partOfSpeech: 'phrase' },
+        ],
       },
       {
         text: '— Με γάλα ή σκέτο;',
         english: '— With milk or black?',
         vocabulary: [
-          { word: 'γάλα', english: 'milk' },
-          { word: 'σκέτο', english: 'plain / black (coffee)' },
+          { word: 'γάλα', english: 'milk', partOfSpeech: 'noun', gender: 'neuter' },
+          { word: 'σκέτο', english: 'plain / black (coffee)', partOfSpeech: 'adjective' },
         ],
       },
       {

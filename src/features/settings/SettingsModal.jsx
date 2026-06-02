@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react'
 import { STORAGE_KEYS } from '@/app/storage/keys'
+import {
+  getSpeechRate,
+  setSpeechRate as persistSpeechRate,
+} from '@/utils/speech'
+import DeveloperPanel, { ProfileSelector } from './DeveloperPanel'
 
 export default function SettingsModal({
   isOpen,
   onClose,
   darkMode,
   setDarkMode,
+  onJumpLesson,
+  onJumpStory,
 }) {
   const [voices, setVoices] = useState([])
   const [selectedVoice, setSelectedVoice] = useState('')
@@ -20,8 +27,9 @@ export default function SettingsModal({
       setVoices(availableVoices)
 
       const savedVoice = localStorage.getItem(STORAGE_KEYS.speechVoice)
-      const savedRate = localStorage.getItem(STORAGE_KEYS.speechRate)
-        ?? localStorage.getItem('epiphany-rate')
+      const savedRate =
+        localStorage.getItem(STORAGE_KEYS.speechRate) ??
+        localStorage.getItem('epiphany-rate')
 
       if (savedVoice) {
         setSelectedVoice(savedVoice)
@@ -29,24 +37,21 @@ export default function SettingsModal({
         const femaleVoice = availableVoices.find((v) =>
           v.name.toLowerCase().includes('female'),
         )
-
         setSelectedVoice(femaleVoice?.name || availableVoices[0].name)
       }
 
-      if (savedRate) {
-        setSpeechRate(Number(savedRate))
-      }
+      setSpeechRate(savedRate ? Number(savedRate) : getSpeechRate())
     }
 
     loadVoices()
-
     speechSynthesis.onvoiceschanged = loadVoices
   }, [])
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.speechVoice, selectedVoice)
-    localStorage.setItem(STORAGE_KEYS.speechRate, String(speechRate))
-  }, [selectedVoice, speechRate])
+    if (selectedVoice) {
+      localStorage.setItem(STORAGE_KEYS.speechVoice, selectedVoice)
+    }
+  }, [selectedVoice])
 
   if (!isOpen) return null
 
@@ -67,7 +72,6 @@ export default function SettingsModal({
           <h3 id="settings-modal-title" className="settings-modal__title">
             Settings
           </h3>
-
           <button
             type="button"
             className="settings-modal__close"
@@ -78,11 +82,12 @@ export default function SettingsModal({
           </button>
         </div>
 
+        <ProfileSelector />
+
         <div className="settings-modal__field">
           <label className="settings-modal__label" htmlFor="greek-voice">
             Greek Voice
           </label>
-
           <select
             id="greek-voice"
             className="settings-modal__select"
@@ -114,9 +119,8 @@ export default function SettingsModal({
 
         <div className="settings-modal__field">
           <label className="settings-modal__label" htmlFor="speech-rate">
-            Speech speed ({speechRate})
+            Speech speed ({Number(speechRate).toFixed(2)}×)
           </label>
-
           <input
             id="speech-rate"
             type="range"
@@ -126,11 +130,17 @@ export default function SettingsModal({
             step="0.02"
             value={speechRate}
             onChange={(e) => {
-              setSpeechRate(e.target.value)
-              localStorage.setItem(STORAGE_KEYS.speechRate, e.target.value)
+              const next = Number(e.target.value)
+              setSpeechRate(next)
+              persistSpeechRate(next)
             }}
           />
+          <p className="settings-modal__hint">
+            Applies to stories, vocabulary audio, dictation, and read-aloud.
+          </p>
         </div>
+
+        <DeveloperPanel onJumpLesson={onJumpLesson} onJumpStory={onJumpStory} />
       </div>
     </div>
   )

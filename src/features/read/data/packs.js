@@ -109,6 +109,31 @@ export const READ_PACKS = [
     description: 'See -ω and -άω verbs used naturally in short texts.',
     unlockLessons: ['verb-conjugation-groups', 'present-tense-endings'],
   },
+  {
+    id: 'weather-everyday',
+    label: 'Weather & Seasons',
+    emoji: '🌤️',
+    category: 'micro-stories',
+    description: 'Heat, rain, and seasonal routines — natural small talk.',
+    unlockLessons: ['present-tense-endings', 'survival-greek'],
+  },
+  {
+    id: 'work-office',
+    label: 'Work & Office',
+    emoji: '💼',
+    category: 'micro-stories',
+    description: 'Meetings, colleagues, and everyday professional life.',
+    unlockLessons: ['time-clock', 'present-tense-endings'],
+  },
+  {
+    id: 'city-life',
+    label: 'City Life',
+    emoji: '🏙️',
+    category: 'micro-stories',
+    description: 'Neighbourhoods, parks, and urban routines.',
+    starter: true,
+    unlockLessons: [],
+  },
 ]
 
 export const READ_CATEGORIES = [

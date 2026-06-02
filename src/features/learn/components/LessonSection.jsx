@@ -3,6 +3,11 @@ import GrammarTable, {
   ConjugationTable,
   ConjugationCompare,
 } from './GrammarTable'
+import PatternEndingStrip from './PatternEndingStrip'
+import TipsList from './TipsList'
+import AspectMatrix from './AspectMatrix'
+import ConceptDrill from './ConceptDrill'
+import TimeTimeline from './TimeTimeline'
 
 export default function LessonSection({ section, showPronunciation, nested = false }) {
   const blockClass = nested ? 'lesson__block lesson__block--nested' : 'lesson__block'
@@ -106,6 +111,50 @@ export default function LessonSection({ section, showPronunciation, nested = fal
             </p>
           ))}
         </aside>
+      )
+
+    case 'tips':
+      return (
+        <section className={blockClass}>
+          <TipsList title={section.title} items={section.items} />
+        </section>
+      )
+
+    case 'patternStrip':
+      return (
+        <section className={blockClass}>
+          <PatternEndingStrip
+            title={section.title}
+            caption={section.caption}
+            stem={section.stem}
+            forms={section.forms}
+          />
+        </section>
+      )
+
+    case 'aspectMatrix':
+      return (
+        <section className={blockClass}>
+          <AspectMatrix title={section.title} caption={section.caption} />
+        </section>
+      )
+
+    case 'conceptDrill':
+      return (
+        <section className={blockClass}>
+          <ConceptDrill title={section.title} questions={section.questions} />
+        </section>
+      )
+
+    case 'timeline':
+      return (
+        <section className={blockClass}>
+          <TimeTimeline
+            title={section.title}
+            caption={section.caption}
+            items={section.items}
+          />
+        </section>
       )
 
     default:

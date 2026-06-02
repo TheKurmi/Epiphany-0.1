@@ -19,6 +19,7 @@ export const LEARNING_PATH = [
   'modal-verbs',
   // Intermediate
   'verb-conjugation-groups',
+  'time-and-aspect',
   'past-tense-intro',
   'object-pronouns',
   'adjective-agreement',

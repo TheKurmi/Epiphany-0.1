@@ -1,6 +1,7 @@
 import { useCallback, useSyncExternalStore } from 'react'
 import { MASTERY_LEVELS } from '@/features/learn/data/quiz/levels'
 import { getQuizProfile } from '@/features/learn/data/quiz/profiles'
+import { isMasteryLevelUnlocked } from '@/app/access'
 import { STORAGE_KEYS } from '@/app/storage/keys'
 
 const STORAGE_KEY = STORAGE_KEYS.masteryProgress
@@ -151,7 +152,7 @@ export function useMasteryProgress(topicId) {
     progress,
     weakPatterns: getWeakPatterns(progress.weakPatterns),
     recordSession,
-    isLevelUnlocked: (levelId) => levelId <= progress.unlockedLevel,
+    isLevelUnlocked: (levelId) => isMasteryLevelUnlocked(levelId, progress.unlockedLevel),
   }
 }
 

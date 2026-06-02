@@ -15,6 +15,7 @@ import { usePracticeSessionStack } from '@/app/hooks/usePracticeSessionStack'
 import AppShell from '@/app/AppShell'
 import ScreenRouter from '@/app/ScreenRouter'
 import { initDocumentTitle } from '@/app/documentTitle'
+import { getStoryById } from '@/features/read/data'
 import '@/styles/app.css'
 
 export default function App() {
@@ -95,6 +96,18 @@ export default function App() {
       isSettingsOpen={isSettingsOpen}
       onOpenSettings={() => setIsSettingsOpen(true)}
       onCloseSettings={() => setIsSettingsOpen(false)}
+      onJumpLesson={(lessonId) => {
+        setIsSettingsOpen(false)
+        nav.openLesson(lessonId)
+      }}
+      onJumpStory={(storyId) => {
+        setIsSettingsOpen(false)
+        const story = getStoryById(storyId)
+        if (story) {
+          nav.openReadPack(story.packId)
+          nav.openStory(storyId)
+        }
+      }}
     >
       <ScreenRouter
         screen={screen}

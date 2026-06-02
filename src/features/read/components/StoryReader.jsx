@@ -1,17 +1,39 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { getStoryById } from '@/features/read/data'
-import { speakGreek } from '@/utils/speech'
+import { getPackById } from '@/features/read/data/packs'
 import { useLearningProgress } from '@/shared/hooks/useLearningProgress'
+import { useReadListen } from '@/shared/hooks/useReadListen'
+import VocabPopover from '@/shared/components/VocabPopover'
 import ReadingSentence from './ReadingSentence'
 import ComprehensionQuiz from './ComprehensionQuiz'
 
 export default function StoryReader({ storyId, onBack }) {
   const story = getStoryById(storyId)
+  const pack = story ? getPackById(story.packId) : null
+  const isListenPack = pack?.category === 'read-listen'
+
   const { markStory } = useLearningProgress()
+
   const [showTranslation, setShowTranslation] = useState(false)
   const [showHighlights, setShowHighlights] = useState(true)
+  const [showVocab, setShowVocab] = useState(true)
+  const [focusMode, setFocusMode] = useState(false)
+  const [progressiveReveal, setProgressiveReveal] = useState(false)
+  const [revealedCount, setRevealedCount] = useState(
+    progressiveReveal ? 1 : Infinity,
+  )
+  const [listenMode, setListenMode] = useState(isListenPack)
   const [activeVocab, setActiveVocab] = useState(null)
   const [phase, setPhase] = useState('reading')
+
+  const sentenceTexts = useMemo(
+    () => story?.sentences.map((s) => s.text) ?? [],
+    [story],
+  )
+
+  const listen = useReadListen(sentenceTexts, {
+    defaultAutoplay: isListenPack,
+  })
 
   if (!story) {
     return (
@@ -24,25 +46,31 @@ export default function StoryReader({ storyId, onBack }) {
     )
   }
 
-  function handleReadAloud() {
-    const fullText = story.sentences.map((s) => s.text).join(' ')
-    speakGreek(fullText)
+  function handleToggleProgressive() {
+    setProgressiveReveal((v) => {
+      const next = !v
+      setRevealedCount(next ? 1 : Infinity)
+      return next
+    })
   }
 
-  function handleReadAloudSentence(text) {
-    speakGreek(text)
-  }
-
-  function startComprehension() {
-    setPhase('comprehension')
+  function revealNext() {
+    setRevealedCount((c) => Math.min(c + 1, story.sentences.length))
   }
 
   function handleComprehensionComplete() {
     markStory(story.id)
   }
 
+  const effectiveRevealed =
+    progressiveReveal && revealedCount !== Infinity
+      ? revealedCount
+      : story.sentences.length
+
   return (
-    <article className="story-reader">
+    <article
+      className={`story-reader${focusMode ? ' story-reader--focus' : ''}${listenMode ? ' story-reader--listen' : ''}`}
+    >
       <header className="story-reader__header">
         <button type="button" className="btn btn--back" onClick={onBack}>
           ← Stories
@@ -50,6 +78,9 @@ export default function StoryReader({ storyId, onBack }) {
         <span className={`story-reader__level story-reader__level--${story.level}`}>
           {story.level}
         </span>
+        {isListenPack ? (
+          <span className="story-reader__mode-badge">Read & Listen</span>
+        ) : null}
         <h1 className="story-reader__title">{story.title}</h1>
         <p className="story-reader__subtitle">{story.titleEnglish}</p>
       </header>
@@ -59,11 +90,13 @@ export default function StoryReader({ storyId, onBack }) {
           <div className="story-reader__toolbar">
             <button
               type="button"
-              className="story-reader__tool"
-              onClick={handleReadAloud}
-              aria-label="Read story aloud"
+              className={`story-reader__tool${listenMode ? ' story-reader__tool--active' : ''}`}
+              onClick={() => {
+                if (listenMode) listen.stop()
+                setListenMode((v) => !v)
+              }}
             >
-              🔊 Read all
+              {listenMode ? '🎧 Listen on' : '🎧 Listen'}
             </button>
             <button
               type="button"
@@ -77,53 +110,112 @@ export default function StoryReader({ storyId, onBack }) {
               className={`story-reader__tool${showHighlights ? ' story-reader__tool--active' : ''}`}
               onClick={() => setShowHighlights((v) => !v)}
             >
-              {showHighlights ? 'Hide' : 'Show'} grammar
+              Grammar {showHighlights ? 'on' : 'off'}
+            </button>
+            <button
+              type="button"
+              className={`story-reader__tool${showVocab ? ' story-reader__tool--active' : ''}`}
+              onClick={() => setShowVocab((v) => !v)}
+            >
+              Vocab {showVocab ? 'on' : 'off'}
+            </button>
+            <button
+              type="button"
+              className={`story-reader__tool${focusMode ? ' story-reader__tool--active' : ''}`}
+              onClick={() => setFocusMode((v) => !v)}
+            >
+              Focus
+            </button>
+            <button
+              type="button"
+              className={`story-reader__tool${progressiveReveal ? ' story-reader__tool--active' : ''}`}
+              onClick={handleToggleProgressive}
+            >
+              Reveal
             </button>
           </div>
 
-          {activeVocab ? (
-            <div className="story-reader__vocab-popover" role="status">
-              <strong>{activeVocab.word}</strong>
-              <span>{activeVocab.english}</span>
+          {listenMode ? (
+            <div className="story-reader__listen-bar" aria-label="Listen controls">
               <button
                 type="button"
-                className="story-reader__vocab-close"
-                onClick={() => setActiveVocab(null)}
-                aria-label="Close"
+                className="story-reader__listen-btn"
+                onClick={listen.togglePlay}
               >
-                ×
+                {listen.isPlaying ? '⏸ Pause' : '▶ Play all'}
               </button>
+              <button
+                type="button"
+                className={`story-reader__tool${listen.autoplay ? ' story-reader__tool--active' : ''}`}
+                onClick={() => listen.setAutoplay((v) => !v)}
+              >
+                Autoplay {listen.autoplay ? 'on' : 'off'}
+              </button>
+              <span className="story-reader__speed-note">
+                Speed: {listen.speechRate.toFixed(2)}× (change in Settings)
+              </span>
             </div>
           ) : null}
 
+          {activeVocab ? (
+            <VocabPopover entry={activeVocab} onClose={() => setActiveVocab(null)} />
+          ) : null}
+
           <div className="story-reader__body">
-            {story.sentences.map((sentence, i) => (
-              <div key={i} className="story-reader__sentence-block">
-                <ReadingSentence
-                  sentence={sentence}
-                  showTranslation={showTranslation}
-                  showHighlights={showHighlights}
-                  onVocabClick={setActiveVocab}
-                  activeVocab={activeVocab?.word}
-                />
-                <button
-                  type="button"
-                  className="story-reader__sentence-audio"
-                  onClick={() => handleReadAloudSentence(sentence.text)}
-                  aria-label="Listen to sentence"
+            {story.sentences.map((sentence, i) => {
+              const isRevealed = i < effectiveRevealed
+              const isActive = listenMode && listen.activeIndex === i
+              const dimmed =
+                listenMode &&
+                listen.activeIndex !== null &&
+                listen.activeIndex !== i
+
+              return (
+                <div
+                  key={i}
+                  className={`story-reader__sentence-block${isActive ? ' story-reader__sentence-block--active' : ''}`}
                 >
-                  🔊
-                </button>
-              </div>
-            ))}
+                  <ReadingSentence
+                    sentence={sentence}
+                    showTranslation={showTranslation}
+                    showHighlights={showHighlights}
+                    showVocab={showVocab}
+                    onVocabClick={setActiveVocab}
+                    activeVocab={activeVocab?.word}
+                    isActive={isActive}
+                    isRevealed={isRevealed}
+                    dimmed={dimmed}
+                  />
+                  <button
+                    type="button"
+                    className="story-reader__sentence-audio"
+                    onClick={() => listen.playSentence(i)}
+                    aria-label="Listen to sentence"
+                  >
+                    🔊
+                  </button>
+                </div>
+              )
+            })}
           </div>
+
+          {progressiveReveal && effectiveRevealed < story.sentences.length ? (
+            <div className="story-reader__reveal-cta">
+              <button type="button" className="btn btn--secondary" onClick={revealNext}>
+                Show next sentence →
+              </button>
+            </div>
+          ) : null}
 
           {story.comprehension?.length ? (
             <div className="story-reader__cta">
               <button
                 type="button"
                 className="btn btn--primary"
-                onClick={startComprehension}
+                onClick={() => {
+                  listen.stop()
+                  setPhase('comprehension')
+                }}
               >
                 Comprehension quiz →
               </button>

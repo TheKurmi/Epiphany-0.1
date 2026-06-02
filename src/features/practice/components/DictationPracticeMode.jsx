@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { speakGreek } from '@/utils/speech'
 import { recordPracticeAttempt } from '@/features/learn/hooks/useMasteryProgress'
+import { useEnterContinue } from '@/shared/hooks/useEnterContinue'
 import PracticeFeedback, { evaluateTypedAnswer } from './PracticeFeedback'
 
 export default function DictationPracticeMode({
@@ -67,6 +68,12 @@ export default function DictationPracticeMode({
     onAnswer('skipped')
   }
 
+  function goNext() {
+    onNext()
+  }
+
+  useEnterContinue({ enabled: revealed, onContinue: goNext })
+
   return (
     <section className="mode-panel practice-mode" aria-label="Dictation">
       <div className={`challenge-card challenge-card--${phase}`}>
@@ -122,7 +129,7 @@ export default function DictationPracticeMode({
           </>
         ) : (
           <div className="challenge-revealed-actions">
-            <button type="button" className="btn btn--primary" onClick={onNext}>
+            <button type="button" className="btn btn--primary" onClick={goNext}>
               {isLast ? 'Finish session' : 'Continue →'}
             </button>
           </div>

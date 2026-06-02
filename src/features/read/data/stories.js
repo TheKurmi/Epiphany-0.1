@@ -2,6 +2,11 @@
  * @typedef {Object} VocabEntry
  * @property {string} word
  * @property {string} english
+ * @property {string} [partOfSpeech]
+ * @property {string} [gender]
+ * @property {string} [plural]
+ * @property {string} [conjugationFamily]
+ * @property {string} [note]
  *
  * @typedef {Object} SentenceHighlight
  * @property {string} word — word as it appears in the sentence
@@ -33,6 +38,7 @@
 
 /** @type {Story[]} */
 import { EXTENDED_STORIES } from './stories-extended'
+import { BATCH_2_STORIES } from './stories-batch-2'
 
 const CORE_STORIES = [
   {
@@ -48,10 +54,16 @@ const CORE_STORIES = [
         english: 'Nikos drinks water every morning.',
         highlights: [{ word: 'πίνει', stem: 'πίν', ending: 'ει', type: 'verb' }],
         vocabulary: [
-          { word: 'Νίκος', english: 'Nikos (name)' },
-          { word: 'νερό', english: 'water' },
-          { word: 'κάθε', english: 'every' },
-          { word: 'πρωί', english: 'morning' },
+          { word: 'Νίκος', english: 'Nikos (name)', partOfSpeech: 'noun' },
+          {
+            word: 'νερό',
+            english: 'water',
+            partOfSpeech: 'noun',
+            gender: 'neuter',
+            plural: 'νερά',
+          },
+          { word: 'κάθε', english: 'every', partOfSpeech: 'adverb' },
+          { word: 'πρωί', english: 'morning', partOfSpeech: 'noun', gender: 'neuter' },
         ],
       },
       {
@@ -391,7 +403,7 @@ const CORE_STORIES = [
   },
 ]
 
-export const STORIES = [...CORE_STORIES, ...EXTENDED_STORIES]
+export const STORIES = [...CORE_STORIES, ...EXTENDED_STORIES, ...BATCH_2_STORIES]
 
 export function getStoryById(storyId) {
   return STORIES.find((s) => s.id === storyId) ?? null

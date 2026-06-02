@@ -7,4 +7,7 @@ export const STORAGE_KEYS = {
   masteryProgress: 'epiphany-learn-mastery',
   speechVoice: 'epiphany-voice',
   speechRate: 'epiphany-speech-rate',
+  learningProfile: 'epiphany-learning-profile',
+  spacedRepetition: 'epiphany-spaced-repetition',
+  vocabProgress: 'epiphany-vocab-progress',
 }

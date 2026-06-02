@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { evaluateAnswer } from '@/utils/answers'
 import { recordPracticeAttempt } from '@/features/learn/hooks/useMasteryProgress'
+import { useEnterContinue } from '@/shared/hooks/useEnterContinue'
 import PracticeFeedback, { resultToPhase } from './PracticeFeedback'
 
 export default function SentenceBuilderMode({
@@ -26,25 +27,10 @@ export default function SentenceBuilderMode({
     reset()
   }, [puzzle?.id, reset])
 
-  if (!puzzle) return null
-
   const revealed = phase !== 'input'
 
-  function addWord(word, index) {
-    if (revealed) return
-    setBuilt((prev) => [...prev, word])
-    setBank((prev) => prev.filter((_, i) => i !== index))
-  }
-
-  function removeWord(index) {
-    if (revealed) return
-    const word = built[index]
-    setBuilt((prev) => prev.filter((_, i) => i !== index))
-    setBank((prev) => [...prev, word])
-  }
-
-  function checkSentence() {
-    if (revealed || !built.length) return
+  const checkSentence = useCallback(() => {
+    if (phase !== 'input' || !built.length || !puzzle) return
 
     const attempt = built.join(' ')
     const expected = puzzle.sentence.replace(/\.$/, '')
@@ -59,6 +45,39 @@ export default function SentenceBuilderMode({
       patternTag: puzzle.patternTag,
     })
     onAnswer(result === 'wrong' ? 'incorrect' : result)
+  }, [built, onAnswer, phase, puzzle])
+
+  const goNext = useCallback(() => {
+    onNext()
+  }, [onNext])
+
+  useEnterContinue({ enabled: revealed, onContinue: goNext })
+
+  useEffect(() => {
+    if (revealed || !built.length) return
+    function onKeyDown(e) {
+      if (e.key === 'Enter' && !e.repeat) {
+        e.preventDefault()
+        checkSentence()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [revealed, built.length, checkSentence])
+
+  if (!puzzle) return null
+
+  function addWord(word, index) {
+    if (revealed) return
+    setBuilt((prev) => [...prev, word])
+    setBank((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  function removeWord(index) {
+    if (revealed) return
+    const word = built[index]
+    setBuilt((prev) => prev.filter((_, i) => i !== index))
+    setBank((prev) => [...prev, word])
   }
 
   function clearAll() {
@@ -127,7 +146,7 @@ export default function SentenceBuilderMode({
           </>
         ) : (
           <div className="challenge-revealed-actions">
-            <button type="button" className="btn btn--primary" onClick={onNext}>
+            <button type="button" className="btn btn--primary" onClick={goNext}>
               {isLast ? 'Finish session' : 'Continue →'}
             </button>
           </div>

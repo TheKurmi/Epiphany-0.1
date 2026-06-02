@@ -1,48 +1,42 @@
-import vocabulary from './vocabulary.json'
+/**
+ * Re-export vocabulary from central registry.
+ * Legacy imports from @/data continue to work.
+ */
 import { DIFFICULTIES } from './constants'
+import {
+  getAllVocabulary,
+  filterVocabulary,
+  queryVocabulary,
+  getVocabById,
+  getVocabByWord,
+  enrichVocabEntry,
+  VOCABULARY_COUNT,
+} from './vocabulary/registry'
+import { VOCAB_CATEGORIES, getCategoryLabel } from './vocabulary/categories'
 
-export { vocabulary }
+export const vocabulary = getAllVocabulary()
 
-const categoryLabels = {
-  greetings: 'Greetings',
-  food: 'Food',
-  travel: 'Travel',
-  school: 'School',
-  family: 'Family',
-  home: 'Home',
-  body: 'Body',
-  numbers: 'Numbers',
-  colors: 'Colors',
-  time: 'Time',
-  weather: 'Weather',
-  shopping: 'Shopping',
-  emotions: 'Emotions',
-  animals: 'Animals',
-  work: 'Work',
-  nature: 'Nature',
-  city: 'City',
-  verbs: 'Verbs',
-  adjectives: 'Adjectives',
-  technology: 'Technology',
-  sports: 'Sports',
-  culture: 'Culture',
+export {
+  getAllVocabulary,
+  filterVocabulary,
+  queryVocabulary,
+  getVocabById,
+  getVocabByWord,
+  enrichVocabEntry,
+  VOCABULARY_COUNT,
+  VOCAB_CATEGORIES,
+  getCategoryLabel,
+  DIFFICULTIES,
 }
 
 export const CATEGORIES = [
   { id: 'all', label: 'All topics' },
-  ...Object.entries(categoryLabels).map(([id, label]) => ({ id, label })),
+  ...VOCAB_CATEGORIES.filter((c) => c.id !== 'all').map((c) => ({
+    id: c.id,
+    label: c.label,
+    emoji: c.emoji,
+  })),
 ]
-
-export function filterVocabulary({
-  category = 'all',
-  difficulty = 'all',
-} = {}) {
-  return vocabulary.filter((word) => {
-    if (category !== 'all' && word.category !== category) return false
-    if (difficulty !== 'all' && word.difficulty !== difficulty) return false
-    return true
-  })
-}
 
 export function shuffleDeck(deck) {
   const copy = [...deck]
@@ -52,12 +46,3 @@ export function shuffleDeck(deck) {
   }
   return copy
 }
-
-export function getCategoryLabel(id) {
-  if (id === 'all') return 'All'
-  return categoryLabels[id] ?? id
-}
-
-export const VOCABULARY_COUNT = vocabulary.length
-
-export { DIFFICULTIES }

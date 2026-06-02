@@ -5,16 +5,24 @@ import {
 } from '@/features/learn/data'
 import { LEARNING_PATH } from '@/features/learn/data/path'
 import { getRecommendedNextLesson } from '@/features/learn/data/curriculum'
-import { getUnlockHint, isLessonUnlocked } from '@/features/learn/data/unlocks'
+import { getUnlockHint } from '@/features/learn/data/unlocks'
+import { isLessonUnlocked } from '@/app/access'
 import { useLearningProgress } from '@/shared/hooks/useLearningProgress'
+import {
+  getAggregatedWeakSpots,
+  useAllMasteryProgress,
+} from '@/features/learn/hooks/useMasteryProgress'
 import EpiphanyLogo from '@/shared/components/EpiphanyLogo'
+import SmartRecommendations from '@/shared/components/SmartRecommendations'
 import LessonCard from './LessonCard'
 import TopicCard from './TopicCard'
 
-export default function LearnScreen({ onBack, onOpenTopic, onOpenLesson }) {
+export default function LearnScreen({ onBack, onOpenTopic, onOpenLesson, onOpenReference }) {
   const pathByLevel = getPathLessonsByLevel()
   const topicsByLevel = getTopicsByLevel()
   const { completedLessons } = useLearningProgress()
+  const masteryAll = useAllMasteryProgress()
+  const weakSpots = getAggregatedWeakSpots(masteryAll, 5)
   const recommendedId = getRecommendedNextLesson(completedLessons, LEARNING_PATH)
   const recommendedLesson = recommendedId ? getLessonById(recommendedId) : null
 
@@ -37,6 +45,19 @@ export default function LearnScreen({ onBack, onOpenTopic, onOpenLesson }) {
           </p>
         </div>
       </header>
+
+      <section className="learn__section learn__section--reference" aria-labelledby="reference-heading">
+        <h2 id="reference-heading" className="learn__section-title">
+          📊 Charts
+        </h2>
+        <p className="learn__section-desc">
+          Present endings, articles, question words, prepositions, and more —
+          concise tables you can scan in seconds.
+        </p>
+        <button type="button" className="learn__reference-btn" onClick={onOpenReference}>
+          Open grammar charts
+        </button>
+      </section>
 
       {recommendedLesson ? (
         <section
@@ -62,6 +83,14 @@ export default function LearnScreen({ onBack, onOpenTopic, onOpenLesson }) {
           </div>
         </section>
       ) : null}
+
+      <SmartRecommendations
+        completedLessons={completedLessons}
+        masteryAll={masteryAll}
+        weakSpots={weakSpots}
+        onOpenLesson={onOpenLesson}
+        onOpenTopic={onOpenTopic}
+      />
 
       <section className="learn__section" aria-labelledby="learning-path-heading">
         <h2 id="learning-path-heading" className="learn__section-title">
@@ -113,6 +142,12 @@ export default function LearnScreen({ onBack, onOpenTopic, onOpenLesson }) {
             <h3 className={`learn__level-heading learn__level-heading--${group.id}`}>
               {group.label}
             </h3>
+            {group.id === 'advanced' ? (
+              <p className="learn__level-desc learn__level-desc--advanced">
+                Advanced syntax, conditionals, passive voice, cases, formal register, and idioms —
+                structured roadmap with lessons arriving progressively.
+              </p>
+            ) : null}
             <div className="learn__topic-grid">
               {group.topics.map((topic) => (
                 <TopicCard

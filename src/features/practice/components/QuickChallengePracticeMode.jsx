@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { recordPracticeAttempt } from '@/features/learn/hooks/useMasteryProgress'
 import { renderPrompt } from '@/shared/quiz/renderPrompt'
+import { useEnterContinue } from '@/shared/hooks/useEnterContinue'
 import PracticeFeedback, { evaluateTypedAnswer } from './PracticeFeedback'
 
 const QUESTION_SECONDS = 15
@@ -101,6 +102,8 @@ export default function QuickChallengePracticeMode({
     if (!revealed) return
     onNext()
   }
+
+  useEnterContinue({ enabled: revealed, onContinue: goNext })
 
   return (
     <section className="mode-panel practice-mode" aria-label="Quick challenge">

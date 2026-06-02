@@ -7,6 +7,7 @@ import {
 
 /**
  * Shared timed question session lifecycle for grammar practice modes.
+ * Deck is snapshotted at session start — mastery updates mid-session do not reset progress.
  */
 export function useTimedQuestionSession({ buildDeck, enabled, resetKey }) {
   const [roundId, setRoundId] = useState(0)
@@ -16,19 +17,18 @@ export function useTimedQuestionSession({ buildDeck, enabled, resetKey }) {
   const [stats, setStats] = useState(() => emptyPracticeStats(true))
   const [questionStartedAt, setQuestionStartedAt] = useState(Date.now())
   const lastDeckRef = useRef([])
+  const buildDeckRef = useRef(buildDeck)
+  buildDeckRef.current = buildDeck
 
-  const startSession = useCallback(
-    (reuseDeck = null) => {
-      const nextDeck = reuseDeck ?? buildDeck()
-      lastDeckRef.current = nextDeck
-      setDeck(nextDeck)
-      setIndex(0)
-      setComplete(false)
-      setStats(emptyPracticeStats(true))
-      setQuestionStartedAt(Date.now())
-    },
-    [buildDeck],
-  )
+  const startSession = useCallback((reuseDeck = null) => {
+    const nextDeck = reuseDeck ?? buildDeckRef.current()
+    lastDeckRef.current = nextDeck
+    setDeck(nextDeck)
+    setIndex(0)
+    setComplete(false)
+    setStats(emptyPracticeStats(true))
+    setQuestionStartedAt(Date.now())
+  }, [])
 
   useEffect(() => {
     if (!enabled) {

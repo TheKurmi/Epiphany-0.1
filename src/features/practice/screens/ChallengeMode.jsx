@@ -47,9 +47,10 @@ export default function ChallengeMode({
   const showPicture = learningStyle === 'picture'
   const hidePromptText = showPicture && studyDirection === 'en-gr'
   const revealed = phase !== 'input'
-  const showGreekAudio = studyDirection === 'en-gr' ? revealed : true
   const promptIsGreek = isGreek(sides.prompt)
   const answerIsGreek = isGreek(sides.answer)
+  const showGreekAudio = promptIsGreek || revealed
+  const showEnglishMeaning = revealed || studyDirection !== 'en-gr'
 
   function renderAnswerLine() {
     if (answerIsGreek) {
@@ -124,7 +125,9 @@ export default function ChallengeMode({
         {showPicture ? (
           <div className="challenge-card__figure">
             <WordVisual card={card} size="lg" />
-            <p className="challenge-card__meaning">{card.english}</p>
+            {showEnglishMeaning ? (
+              <p className="challenge-card__meaning">{card.english}</p>
+            ) : null}
           </div>
         ) : null}
 

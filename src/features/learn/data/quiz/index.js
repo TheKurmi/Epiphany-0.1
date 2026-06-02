@@ -3,6 +3,7 @@ import { getMasteryLevel, MASTERY_LEVELS } from './levels'
 import { generateConjugationQuestion, generateEndingRecognition } from './generators/conjugation'
 import { generateArticlesQuestion } from './generators/articles'
 import { generateNegationQuestion } from './generators/negation'
+import { generateSentenceQuestion } from './generators/sentence'
 import { generateVocabularyQuestion } from './generators/vocabulary'
 
 /**

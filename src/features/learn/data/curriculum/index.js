@@ -3,7 +3,7 @@
  * Lessons live in lessons/; quiz profiles in quiz/profiles.js.
  */
 
-import { isLessonUnlocked } from '../unlocks'
+import { isLessonUnlocked } from '@/app/access'
 
 export const CURRICULUM_LEVELS = ['beginner', 'intermediate', 'advanced']
 

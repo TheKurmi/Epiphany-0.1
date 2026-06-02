@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { getLessonById } from '@/features/learn/data'
-import { isLessonUnlocked } from '@/features/learn/data/unlocks'
+import { isLessonUnlocked } from '@/app/access'
 import { getCompletedLessons } from '@/shared/hooks/useLearningProgress'
 import { SCREENS } from './screens'
 
@@ -42,6 +42,8 @@ export function useAppNavigation() {
       },
 
       openLearn: () => setScreen(SCREENS.LEARN),
+      openReference: () => setScreen(SCREENS.REFERENCE),
+      backFromReference: () => setScreen(SCREENS.LEARN),
       backFromLearn: () => {
         setSelection(emptySelection)
         setScreen(SCREENS.HOME)

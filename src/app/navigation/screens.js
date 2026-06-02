@@ -8,6 +8,7 @@ export const SCREENS = {
   PRACTICE: 'practice',
   PRACTICE_CONFIG: 'practice-config',
   SESSION: 'session',
+  REFERENCE: 'reference',
   READ: 'read',
   READ_PACK: 'read-pack',
   STORY: 'story',
@@ -18,7 +19,8 @@ export function isLearnScreen(screen) {
     screen === SCREENS.LEARN ||
     screen === SCREENS.TOPIC ||
     screen === SCREENS.LESSON ||
-    screen === SCREENS.MASTERY_QUIZ
+    screen === SCREENS.MASTERY_QUIZ ||
+    screen === SCREENS.REFERENCE
   )
 }
 

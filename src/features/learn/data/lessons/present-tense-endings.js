@@ -12,7 +12,7 @@ const lesson = {
   topicId: 'present-tense',
   level: 'beginner',
   pathOrder: 2,
-  duration: '3–4 min',
+  duration: '5–6 min',
   title: '-ω Verbs & Present Endings',
   summary: 'One pattern, hundreds of verbs — spot the ending, not every letter.',
   intro: {
@@ -22,12 +22,35 @@ const lesson = {
       'In conversation, Greeks often drop the subject pronoun (εγώ, εσύ) because the verb ending already tells you who acts. When you hear πίνω, you know it means “I drink” without needing εγώ. Focus on endings first — they are the real grammar signal.',
     ],
     examples: [
-      { greek: 'πίνω', english: 'I drink' },
-      { greek: 'πίνεις', english: 'you drink' },
-      { greek: 'πίνουμε', english: 'we drink' },
+      {
+        greek: 'πίνω',
+        english: 'I drink',
+        highlight: { word: 'πίνω', stem: 'πίν', ending: 'ω', type: 'verb', label: '1st person singular present (-ω)' },
+      },
+      {
+        greek: 'πίνεις',
+        english: 'you drink',
+        highlight: { word: 'πίνεις', stem: 'πίν', ending: 'εις', type: 'verb', label: '2nd person singular present (-εις)' },
+      },
+      {
+        greek: 'πίνει',
+        english: 'he/she drinks',
+        highlight: { word: 'πίνει', stem: 'πίν', ending: 'ει', type: 'verb', label: '3rd person singular present (-ει)' },
+      },
     ],
   },
   sections: [
+    {
+      type: 'patternStrip',
+      title: 'Watch the endings change',
+      caption: 'One stem, six persons — the pattern you will see everywhere.',
+      stem: 'γράφ',
+      forms: [
+        { ending: 'ω', label: 'εγώ', form: 'γράφω' },
+        { ending: 'εις', label: 'εσύ', form: 'γράφεις' },
+        { ending: 'ει', label: 'αυτός/ή/ό', form: 'γράφει' },
+      ],
+    },
     {
       type: 'grammarTable',
       title: 'The six endings',
@@ -44,6 +67,20 @@ const lesson = {
       verbs: [
         { label: 'πίνω', stem: 'πίν', forms: ['πίνω', 'πίνεις', 'πίνει'] },
         { label: 'γράφω', stem: 'γράφ', forms: ['γράφω', 'γράφεις', 'γράφει'] },
+      ],
+    },
+    {
+      type: 'tips',
+      title: 'Teacher tips',
+      items: [
+        {
+          title: 'Endings, not whole verbs',
+          text: 'Your goal is to recognise -ω, -εις, -ει — then any new verb stem becomes readable.',
+        },
+        {
+          title: 'Pronouns are optional',
+          text: 'Πίνω καφέ is complete without εγώ. The ending does the work.',
+        },
       ],
     },
   ],

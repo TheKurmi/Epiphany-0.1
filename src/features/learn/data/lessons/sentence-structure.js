@@ -23,13 +23,48 @@ const lesson = {
     {
       type: 'grammarTable',
       title: 'Simple template',
-      columns: ['Part', 'Example'],
+      columns: ['Part', 'Greek', 'Role'],
       rows: [
-        ['Subject', 'Η Μαρία'],
-        ['Verb', 'πίνει'],
-        ['Object', 'καφέ'],
+        ['Subject', 'Η Μαρία', 'Who acts'],
+        ['Verb', 'πίνει', 'The action'],
+        ['Object', 'καφέ', 'What receives the action'],
       ],
       highlightColumn: 1,
+    },
+    {
+      type: 'examples',
+      title: 'Break it down',
+      items: [
+        {
+          greek: 'Η Μαρία πίνει καφέ.',
+          english: 'Maria drinks coffee.',
+          note: 'Subject + Verb + Object',
+        },
+        {
+          greek: 'Το παιδί τρώει.',
+          english: 'The child is eating.',
+          note: 'Subject + Verb (no object needed)',
+        },
+        {
+          greek: 'ο καφές ζεστός',
+          english: 'the hot coffee',
+          note: 'Adjective after noun',
+        },
+      ],
+    },
+    {
+      type: 'tips',
+      title: 'Building intuition',
+      items: [
+        {
+          title: 'Start strict, then flex',
+          text: 'Use SVO until it feels natural — then notice how native speakers shift words for emphasis.',
+        },
+        {
+          title: 'Articles mark roles',
+          text: 'Η Μαρία (subject) and τον καφέ (object) — articles help you spot who does what.',
+        },
+      ],
     },
   ],
   commonMistakes: [
