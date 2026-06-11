@@ -284,6 +284,7 @@ Neither agent replaces code review or human product direction.
 Primary blueprint files under `/docs`:
 
 - `SYSTEMS_OVERVIEW.md` — start here
+- `PLATFORM_ARCHITECTURE.md` — engine vs content, platform transition
 - `educational-philosophy.md` — non-negotiable principles
 - `platform-vision.md` — ecosystem direction
 - `learning-path-system.md`, `progression-system.md`

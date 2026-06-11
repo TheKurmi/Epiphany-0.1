@@ -1,6 +1,10 @@
 /**
  * Content authoring schemas — reusable definitions for lessons, stories, exercises.
  * Future teacher/creator tools should validate against these shapes.
+ *
+ * Platform transition: generalized TypeScript schemas live in
+ * `src/platform/content-schema/` (Phase 1). This file remains the runtime
+ * JSDoc bridge for Greek 0.2 until gradual migration.
  */
 
 /** @typedef {'beginner'|'intermediate'|'advanced'} ContentLevel */

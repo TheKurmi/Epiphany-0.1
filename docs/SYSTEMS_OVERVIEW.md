@@ -123,10 +123,19 @@ See [creator-course-system.md](./creator-course-system.md) and [platform-vision.
 
 ---
 
+## Platform Layer (Phase 1)
+
+Code: `src/platform/` — content schemas, engine registry, adaptive module map, creator capability contracts.
+
+Architecture: **[PLATFORM_ARCHITECTURE.md](./PLATFORM_ARCHITECTURE.md)** — engine vs content separation, primitives, flows.
+
+---
+
 ## Document Map
 
 | Document | Focus |
 |----------|--------|
+| [PLATFORM_ARCHITECTURE.md](./PLATFORM_ARCHITECTURE.md) | Platform transition, engines vs content, primitives |
 | [educational-philosophy.md](./educational-philosophy.md) | Why Epiphany teaches the way it does |
 | [platform-vision.md](./platform-vision.md) | Project Epiphany ecosystem |
 | [learning-path-system.md](./learning-path-system.md) | Paths, lessons, guided journeys |

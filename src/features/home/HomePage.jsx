@@ -1,5 +1,6 @@
 import EpiphanyLogo from '@/shared/components/EpiphanyLogo'
 import ProgressDashboard from './ProgressDashboard'
+import VocabularyTest from '@/VocabularyTest'
 
 const HUB_CARDS = [
   {
@@ -43,6 +44,10 @@ export default function HomePage({ onLearn, onPractice, onRead, onOpenLesson }) 
           confidence.
         </p>
       </header>
+
+      <section aria-label="Vocabulary database test" style={{ padding: '0 1rem', maxWidth: '40rem', margin: '0 auto' }}>
+        <VocabularyTest />
+      </section>
 
       <ProgressDashboard
         compact
